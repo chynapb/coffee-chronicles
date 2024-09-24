@@ -3,7 +3,7 @@ import { View, Text } from 'react-native'
 const PastBrews = () => {
   return (
     <View>
-      <Text>past</Text>
+      <Text>Past Brews</Text>
     </View>
   )
 }
