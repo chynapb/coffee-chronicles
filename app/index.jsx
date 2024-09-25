@@ -24,10 +24,10 @@ const styles = StyleSheet.create({
   },
   header: {
     fontSize: 36,
-    color: '#3e3e5f',
+    color: '#343450',
   },
   icon: {
-    color: '#3e3e5f',
+    color: '#343450',
     margin: 15,
   },
   link: {

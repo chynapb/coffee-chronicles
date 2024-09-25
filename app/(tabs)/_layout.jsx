@@ -1,4 +1,5 @@
 import { Tabs } from 'expo-router'
+import AntDesign from '@expo/vector-icons/AntDesign'
 
 const TabsLayout = () => {
   return (
@@ -6,7 +7,7 @@ const TabsLayout = () => {
       <Tabs
         screenOptions={{
           tabBarActiveTintColor: '#FF4500',
-          tabBarInactiveTintColor: '#3e3e5f',
+          tabBarInactiveTintColor: '#343450',
         }}
       >
         <Tabs.Screen
@@ -14,6 +15,9 @@ const TabsLayout = () => {
           options={{
             title: 'Home',
             headerShown: false,
+            tabBarIcon: ({ color, size }) => (
+              <AntDesign name='home' size={24} color={color} />
+            ),
           }}
         />
         <Tabs.Screen
@@ -21,6 +25,9 @@ const TabsLayout = () => {
           options={{
             title: 'Top Brews',
             headerShown: false,
+            tabBarIcon: ({ color, size }) => (
+              <AntDesign name='hearto' size={24} color={color} />
+            ),
           }}
         />
         <Tabs.Screen
@@ -28,6 +35,9 @@ const TabsLayout = () => {
           options={{
             title: 'Past Brews',
             headerShown: false,
+            tabBarIcon: ({ color, size }) => (
+              <AntDesign name='clockcircleo' size={24} color={color} />
+            ),
           }}
         />
       </Tabs>
