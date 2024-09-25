@@ -6,8 +6,8 @@ import { Link } from 'expo-router'
 export default function App() {
   return (
     <View style={styles.container}>
-      <Text style={{ fontSize: 36 }}>Coffee Chronicles</Text>
-      <Feather name='coffee' size={50} style={{ margin: 15 }} />
+      <Text style={styles.header}>Coffee Chronicles</Text>
+      <Feather name='coffee' size={50} style={styles.icon} />
       <StatusBar style='auto' />
       <Link href='/home' style={styles.link}>
         Let's Brew!
@@ -21,6 +21,14 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  header: {
+    fontSize: 36,
+    color: '#3e3e5f',
+  },
+  icon: {
+    color: '#3e3e5f',
+    margin: 15,
   },
   link: {
     fontSize: 24,
