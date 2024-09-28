@@ -2,12 +2,15 @@ import { View, Text, ScrollView, StyleSheet } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import Button from '../../components/Button'
 import { router } from 'expo-router'
+import Form from '../../components/Form'
 
 const SignIn = () => {
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView>
         <View>
+          <Text style={styles.header}>Sign In</Text>
+          <Form />
           <Text style={styles.text}>Don't have an account?</Text>
           <Button
             title='Sign Up'
@@ -26,6 +29,12 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  header: {
+    fontSize: 36,
+    color: '#343450',
+    textAlign: 'center',
+    margin: 25,
   },
   text: {
     fontSize: 16,
