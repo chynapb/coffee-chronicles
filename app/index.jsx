@@ -1,18 +1,28 @@
 import { StatusBar } from 'expo-status-bar'
-import { StyleSheet, Text, View } from 'react-native'
+import { SafeAreaView, StyleSheet, Text } from 'react-native'
 import Feather from '@expo/vector-icons/Feather'
-import { Link } from 'expo-router'
+import Button from '../components/Button'
 
 export default function App() {
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <Text style={styles.header}>Coffee Chronicles</Text>
       <Feather name='coffee' size={50} style={styles.icon} />
       <StatusBar style='auto' />
-      <Link href='/home' style={styles.link}>
-        Let's Brew!
-      </Link>
-    </View>
+      <Text style={styles.text}>Find your perfect brew</Text>
+      <Button
+        title='Sign in'
+        buttonStyle={styles.buttonContainer}
+        buttonText={styles.buttonText}
+        handlePress={() => {}}
+      />
+      <Button
+        title='Continue as guest'
+        buttonStyle={styles.buttonContainer}
+        buttonText={styles.buttonText}
+        handlePress={() => {}}
+      />
+    </SafeAreaView>
   )
 }
 
@@ -23,16 +33,31 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   header: {
-    fontSize: 36,
+    fontSize: 38,
     color: '#343450',
   },
   icon: {
     color: '#343450',
-    margin: 15,
+    margin: 10,
   },
-  link: {
+  text: {
     fontSize: 24,
-    margin: 50,
+    margin: 30,
     color: '#FF4500',
+    fontStyle: 'italic',
+  },
+  buttonContainer: {
+    padding: 15,
+    backgroundColor: '#FF4500',
+    borderRadius: 50,
+    margin: 5,
+    width: 250,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  buttonText: {
+    color: '#F2F3F4',
+    fontSize: 16,
+    fontWeight: 'bold',
   },
 })
