@@ -1,27 +1,31 @@
-import { StatusBar } from 'expo-status-bar'
-import { SafeAreaView, StyleSheet, Text } from 'react-native'
+import { SafeAreaView, StyleSheet, Text, View, StatusBar } from 'react-native'
+import { Redirect, router } from 'expo-router'
 import Feather from '@expo/vector-icons/Feather'
 import Button from '../components/Button'
 
 export default function App() {
   return (
     <SafeAreaView style={styles.container}>
-      <Text style={styles.header}>Coffee Chronicles</Text>
-      <Feather name='coffee' size={50} style={styles.icon} />
-      <StatusBar style='auto' />
-      <Text style={styles.text}>Find your perfect brew</Text>
-      <Button
-        title='Sign in'
-        buttonStyle={styles.buttonContainer}
-        buttonText={styles.buttonText}
-        handlePress={() => {}}
-      />
-      <Button
-        title='Continue as guest'
-        buttonStyle={styles.buttonContainer}
-        buttonText={styles.buttonText}
-        handlePress={() => {}}
-      />
+      <View style={styles.headerContainer}>
+        <Text style={styles.header}>Coffee Chronicles</Text>
+        <Feather name='coffee' size={50} style={styles.icon} />
+        <Text style={styles.text}>Find your perfect brew</Text>
+      </View>
+      <View style={styles.buttonContainer}>
+        <Button
+          title='Sign in'
+          buttonStyle={styles.button}
+          buttonText={styles.buttonText}
+          handlePress={() => router.push('/sign-in')}
+        />
+        <Button
+          title='Continue as guest'
+          buttonStyle={styles.button}
+          buttonText={styles.buttonText}
+          handlePress={() => router.push('/home')}
+        />
+      </View>
+      <StatusBar barStyle='dark' />
     </SafeAreaView>
   )
 }
@@ -29,11 +33,16 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: 'center',
     justifyContent: 'center',
+    alignItems: 'center',
+  },
+  headerContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   header: {
-    fontSize: 38,
+    fontSize: 40,
     color: '#343450',
   },
   icon: {
@@ -42,12 +51,19 @@ const styles = StyleSheet.create({
   },
   text: {
     fontSize: 24,
-    margin: 30,
+    marginTop: 25,
+    marginBottom: 75,
     color: '#FF4500',
     fontStyle: 'italic',
+    textAlign: 'center',
   },
   buttonContainer: {
-    padding: 15,
+    position: 'absolute',
+    bottom: 50,
+    alignItems: 'center',
+  },
+  button: {
+    padding: 18,
     backgroundColor: '#FF4500',
     borderRadius: 50,
     margin: 5,
