@@ -3,7 +3,8 @@ import { View, Text } from 'react-native'
 const Home = () => {
   return (
     <View>
-      <Text>home</Text>
+      <Text>Home</Text>
+      <Text>Create an Account</Text>
     </View>
   )
 }
