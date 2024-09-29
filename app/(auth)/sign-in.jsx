@@ -1,23 +1,44 @@
 import { View, Text, ScrollView, StyleSheet } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import Button from '../../components/Button'
-import { router } from 'expo-router'
+import { Link } from 'expo-router'
 import Form from '../../components/Form'
+import { useState } from 'react'
 
 const SignIn = () => {
+  const [form, setForm] = useState({
+    email: '',
+    password: '',
+  })
+
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView>
         <View>
-          <Text style={styles.header}>Sign In</Text>
-          <Form />
-          <Text style={styles.text}>Don't have an account?</Text>
+          <Text style={styles.header}>Sign in</Text>
+          <Form
+            title='Email'
+            value={form.email}
+            placeholder='Email'
+            handleChangeText={(e) => setForm({ ...form, email: e })}
+            keyboardType='email=address'
+          />
+          <Form
+            title='Password'
+            value={form.password}
+            placeholder='Password'
+            handleChangeText={(e) => setForm({ ...form, password: e })}
+          />
           <Button
-            title='Sign Up'
+            title='Sign in'
             buttonStyle={styles.button}
             buttonText={styles.buttonText}
-            handlePress={() => router.push('/sign-up')}
+            handlePress={() => {}}
           />
+          <Text style={styles.text}>Don't have an account?</Text>
+          <Link style={styles.link} href='/sign-up'>
+            Sign up
+          </Link>
         </View>
       </ScrollView>
     </SafeAreaView>
@@ -37,11 +58,17 @@ const styles = StyleSheet.create({
     margin: 25,
   },
   text: {
+    textAlign: 'center',
     fontSize: 16,
     color: '#343450',
   },
+  link: {
+    textAlign: 'center',
+    color: '#FF4500',
+    fontSize: 16,
+  },
   button: {
-    padding: 18,
+    padding: 15,
     backgroundColor: '#FF4500',
     borderRadius: 50,
     margin: 10,

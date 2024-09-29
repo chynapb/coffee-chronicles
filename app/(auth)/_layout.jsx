@@ -1,6 +1,5 @@
 import { Stack } from 'expo-router'
-import { View, Text } from 'react-native'
-import { StatusBar } from 'expo-status-bar'
+import { View, Text, StatusBar } from 'react-native'
 
 const AuthLayout = () => {
   return (

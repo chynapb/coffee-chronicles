@@ -1,5 +1,5 @@
 import { SafeAreaView, StyleSheet, Text, View, StatusBar } from 'react-native'
-import { Redirect, router } from 'expo-router'
+import { router } from 'expo-router'
 import Feather from '@expo/vector-icons/Feather'
 import Button from '../components/Button'
 
