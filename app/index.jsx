@@ -8,7 +8,7 @@ export default function App() {
     <SafeAreaView style={styles.container}>
       <View style={styles.headerContainer}>
         <Text style={styles.header}>Coffee Chronicles</Text>
-        <Feather name='coffee' size={50} style={styles.icon} />
+        {/* <Feather name='coffee' size={50} style={styles.icon} /> */}
         <Text style={styles.text}>Find your perfect brew</Text>
       </View>
       <View style={styles.buttonContainer}>
@@ -42,7 +42,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   header: {
-    fontSize: 40,
+    fontFamily: 'Poppins_400Regular',
+    fontSize: 36,
     color: '#343450',
   },
   icon: {
@@ -50,12 +51,12 @@ const styles = StyleSheet.create({
     margin: 10,
   },
   text: {
-    fontSize: 24,
-    marginTop: 25,
+    fontSize: 22,
+    marginTop: 15,
     marginBottom: 75,
     color: '#FF4500',
-    fontStyle: 'italic',
     textAlign: 'center',
+    fontFamily: 'Poppins_400Regular_Italic',
   },
   buttonContainer: {
     position: 'absolute',
