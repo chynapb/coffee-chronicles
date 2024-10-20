@@ -1,4 +1,5 @@
-import { StyleSheet, Text, View, StatusBar } from 'react-native'
+import { router } from 'expo-router'
+import { StyleSheet, Text, View, StatusBar, Button } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 
 export default function App() {
@@ -7,6 +8,7 @@ export default function App() {
       <View>
         <Text style={styles.header}>Coffee Chronicles</Text>
         <Text style={styles.text}>Find your perfect brew</Text>
+        <Button title='Login' onPress={() => router.push('/(tabs)/home')} />
       </View>
       <StatusBar barStyle='dark-content' />
     </SafeAreaView>
