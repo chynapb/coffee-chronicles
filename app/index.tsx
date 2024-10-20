@@ -1,6 +1,6 @@
+import { SafeAreaView, StyleSheet, Text, View, StatusBar } from 'react-native'
 import { router } from 'expo-router'
-import { StyleSheet, Text, View, StatusBar, Button } from 'react-native'
-import { SafeAreaView } from 'react-native-safe-area-context'
+import Button from '../components/Button'
 
 export default function App() {
   return (
@@ -8,7 +8,20 @@ export default function App() {
       <View>
         <Text style={styles.header}>Coffee Chronicles</Text>
         <Text style={styles.text}>Find your perfect brew</Text>
-        <Button title='Login' onPress={() => router.push('/(tabs)/home')} />
+      </View>
+      <View style={styles.buttonContainer}>
+        <Button
+          title='Sign in'
+          textStyle={styles.buttonText}
+          buttonStyle={styles.button}
+          onPress={() => router.push('/sign-in')}
+        />
+        <Button
+          title='Continue as guest'
+          textStyle={styles.buttonText}
+          buttonStyle={styles.button}
+          onPress={() => router.push('/home')}
+        />
       </View>
       <StatusBar barStyle='dark-content' />
     </SafeAreaView>
@@ -31,5 +44,24 @@ const styles = StyleSheet.create({
     marginBottom: 75,
     color: '#FF4500',
     textAlign: 'center',
+  },
+  buttonContainer: {
+    position: 'absolute',
+    bottom: 50,
+    alignItems: 'center',
+  },
+  button: {
+    padding: 18,
+    backgroundColor: '#FF4500',
+    borderRadius: 50,
+    margin: 5,
+    width: 250,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  buttonText: {
+    color: '#F2F3F4',
+    fontSize: 16,
+    fontWeight: 'bold',
   },
 })

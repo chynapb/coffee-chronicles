@@ -5,6 +5,7 @@
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icons/coffee-icon.png",
+    "scheme": "com.chynablair.coffeechronicles",
     "userInterfaceStyle": "light",
     "splash": {
       "image": "./assets/icons/coffee-icon.png",
