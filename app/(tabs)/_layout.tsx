@@ -1,3 +1,4 @@
+// app/(tabs)/layout.tsx
 import { Tabs } from 'expo-router'
 import AntDesign from '@expo/vector-icons/AntDesign'
 
@@ -11,7 +12,7 @@ const TabsLayout = () => {
         }}
       >
         <Tabs.Screen
-          name='home'
+          name='(home)'
           options={{
             title: 'Home',
             headerShown: false,

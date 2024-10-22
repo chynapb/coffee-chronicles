@@ -8,7 +8,7 @@ const SignIn = () => {
     <SafeAreaView style={styles.container}>
       <ScrollView>
         <View>
-          <Text style={styles.header}>Sign in</Text>
+          <Text style={styles.header}>Sign up</Text>
           <Button
             title='Sign in'
             buttonStyle={styles.button}
@@ -17,7 +17,7 @@ const SignIn = () => {
           />
           <Text style={styles.text}>Already have an account?</Text>
           <Link style={styles.link} href='/sign-in'>
-            Sign in
+            Sign up
           </Link>
         </View>
       </ScrollView>

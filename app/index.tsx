@@ -20,7 +20,7 @@ export default function App() {
           title='Continue as guest'
           textStyle={styles.buttonText}
           buttonStyle={styles.button}
-          onPress={() => router.push('/home')}
+          onPress={() => router.push('/(home)')}
         />
       </View>
       <StatusBar barStyle='dark-content' />
