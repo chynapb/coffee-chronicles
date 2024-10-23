@@ -1,9 +1,10 @@
-import { Pressable, StyleProp, Text, TextStyle } from 'react-native'
+import { ReactElement } from 'react'
+import { Pressable, StyleProp, Text, TextStyle, ViewStyle } from 'react-native'
 
 type ButtonProps = {
   title: string
   textStyle?: StyleProp<TextStyle>
-  buttonStyle?: StyleProp<TextStyle>
+  buttonStyle?: StyleProp<ViewStyle>
   onPress: () => void
 }
 

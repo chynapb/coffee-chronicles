@@ -1,26 +1,27 @@
-import { View, Text, ScrollView, StyleSheet } from 'react-native'
+import { View, Text, StyleSheet } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import Button from '../../components/Button'
 import { Link } from 'expo-router'
+import Form from '../../components/Form'
 
-const SignIn = () => {
+const SignUp = () => {
   return (
     <SafeAreaView style={styles.container}>
-      <ScrollView>
-        <View>
-          <Text style={styles.header}>Sign up</Text>
-          <Button
-            title='Sign in'
-            buttonStyle={styles.button}
-            textStyle={styles.buttonText}
-            onPress={() => {}}
-          />
-          <Text style={styles.text}>Already have an account?</Text>
-          <Link style={styles.link} href='/sign-in'>
-            Sign up
-          </Link>
-        </View>
-      </ScrollView>
+      <View>
+        <Text style={styles.header}>Sign up</Text>
+        <Form title='Email' value={''} placeholder='Email address' />
+        <Form title='Password' value={''} placeholder='Password' />
+        <Button
+          title='Sign up'
+          buttonStyle={styles.button}
+          textStyle={styles.buttonText}
+          onPress={() => {}}
+        />
+        <Text style={styles.text}>Already have an account?</Text>
+        <Link style={styles.link} href='/sign-in'>
+          Sign in
+        </Link>
+      </View>
     </SafeAreaView>
   )
 }
@@ -62,4 +63,4 @@ const styles = StyleSheet.create({
   },
 })
 
-export default SignIn
+export default SignUp
