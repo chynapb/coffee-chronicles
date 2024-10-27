@@ -7,10 +7,10 @@ type FormProps = {
   title: string
   value: string
   placeholder?: string
-  handleChangeText?: (text: string) => void
+  onChangeText?: (text: string) => void
 }
 
-const Form = ({ title, value, placeholder, handleChangeText }: FormProps) => {
+const Form = ({ title, value, placeholder, onChangeText }: FormProps) => {
   const [showPassword, setShowPassword] = useState(false)
 
   return (
@@ -20,7 +20,7 @@ const Form = ({ title, value, placeholder, handleChangeText }: FormProps) => {
         value={value}
         placeholder={placeholder}
         placeholderTextColor='#979a9a'
-        onChangeText={handleChangeText}
+        onChangeText={onChangeText}
         secureTextEntry={title === 'Password' && !showPassword}
       />
       {title === 'Password' && (

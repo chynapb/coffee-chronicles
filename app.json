@@ -23,10 +23,9 @@
 
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/icons/coffee-icon.png",
+        "foregroundImage": "./assets/icons/adaptiveIcon.png",
         "backgroundColor": "#ffffff"
       },
-
       "package": "com.chynablair.coffeechronicles"
     },
     "web": {

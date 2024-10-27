@@ -1,6 +1,7 @@
 // app/(tabs)/layout.tsx
 import { Tabs } from 'expo-router'
 import AntDesign from '@expo/vector-icons/AntDesign'
+import { SafeAreaView } from 'react-native-safe-area-context'
 
 const TabsLayout = () => {
   return (
