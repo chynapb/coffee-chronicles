@@ -4,7 +4,7 @@ import { initializeAuth, getReactNativePersistence } from 'firebase/auth'
 import { getFirestore } from 'firebase/firestore'
 
 const firebaseConfig = {
-  apiKey: 'AIzaSyB3o7JRgz4W9H3Kh-vnESdaYpkTN8o0q8s',
+  apiKey: process.env.REACT_APP_GOOGLE_API_KEY,
   authDomain: 'coffee-chronicles.firebaseapp.com',
   projectId: 'coffee-chronicles',
   storageBucket: 'coffee-chronicles.appspot.com',
