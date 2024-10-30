@@ -2,19 +2,19 @@ import { View, Text, StyleSheet, Alert, TextInput } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import Button from '../../components/Button'
 import Form from '../../components/Form'
-import { useState } from 'react'
+import React, { useState } from 'react'
 import { Link, useRouter } from 'expo-router'
-import { signInWithEmailAndPassword } from 'firebase/auth'
-import { FIREBASE_AUTH } from '../../firebaseConfig'
+import { UserAuth } from '../../context/AuthContext'
 
 const SignIn = () => {
   const [email, setEmail] = useState<string>('')
   const [password, setPassword] = useState<string>('')
+  const { login } = UserAuth()
   const router = useRouter()
 
   const handleSignIn = async (): Promise<void> => {
     try {
-      await signInWithEmailAndPassword(FIREBASE_AUTH, email, password)
+      await login(email, password)
       router.replace('/(home)')
     } catch (error: unknown) {
       if (error instanceof Error) {

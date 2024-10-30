@@ -4,21 +4,20 @@ import Button from '../../components/Button'
 import { Link, useRouter } from 'expo-router'
 import Form from '../../components/Form'
 import { useState } from 'react'
-import { createUserWithEmailAndPassword } from 'firebase/auth'
-import { FIREBASE_AUTH } from '../../firebaseConfig'
-
+import { UserAuth } from '../../context/AuthContext'
 const SignUp = () => {
   const [email, setEmail] = useState<string>('')
   const [password, setPassword] = useState<string>('')
+  const { createUser } = UserAuth()
   const router = useRouter()
 
-  const handleSignIn = async (): Promise<void> => {
+  const handleSignUp = async (): Promise<void> => {
     try {
-      await createUserWithEmailAndPassword(FIREBASE_AUTH, email, password)
+      await createUser(email, password)
       router.replace('/(home)')
     } catch (error: unknown) {
       if (error instanceof Error) {
-        Alert.alert('Sign in error: ', error.message)
+        Alert.alert('Sign up error: ', error.message)
       } else {
         Alert.alert('An unknown error occurred. Please try again later.')
       }
@@ -45,7 +44,7 @@ const SignUp = () => {
           title='Sign up'
           buttonStyle={styles.button}
           textStyle={styles.buttonText}
-          onPress={handleSignIn}
+          onPress={handleSignUp}
         />
         <Text style={styles.text}>Already have an account?</Text>
         <Link style={styles.link} href='/sign-in'>

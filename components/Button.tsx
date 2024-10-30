@@ -1,4 +1,3 @@
-import { ReactElement } from 'react'
 import { Pressable, StyleProp, Text, TextStyle, ViewStyle } from 'react-native'
 
 type ButtonProps = {

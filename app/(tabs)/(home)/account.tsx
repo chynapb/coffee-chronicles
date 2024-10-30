@@ -6,10 +6,6 @@ const Account = () => {
   return (
     <SafeAreaView style={styles.container}>
       <Text>My Account</Text>
-      <Text>Oops! Looks like you aren't signed in.</Text>
-      <Link href='/sign-in' style={styles.link}>
-        Sign in
-      </Link>
     </SafeAreaView>
   )
 }

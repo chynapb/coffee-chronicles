@@ -5,10 +5,8 @@ import Button from '../components/Button'
 export default function App() {
   return (
     <SafeAreaView style={styles.container}>
-      <View>
-        <Text style={styles.header}>Coffee Chronicles</Text>
-        <Text style={styles.text}>Find your perfect brew</Text>
-      </View>
+      <Text style={styles.header}>Coffee Chronicles</Text>
+      <Text style={styles.text}>Find your perfect brew</Text>
       <View style={styles.buttonContainer}>
         <Button
           title='Sign in'
