@@ -1,13 +1,16 @@
 import { Link, router } from 'expo-router'
-import { Text, StyleSheet, Alert, View } from 'react-native'
+import { Text, StyleSheet, Alert, ActivityIndicator } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { UserAuth } from '../../../context/AuthContext'
 import Button from '../../../components/Button'
+import { useState } from 'react'
 
 const Home = () => {
+  const [loading, setLoading] = useState(false)
   const { user, logout } = UserAuth()
 
-  const handleLogout = async (): Promise<void> => {
+  const handleSignOut = async (): Promise<void> => {
+    setLoading(true)
     try {
       await logout()
       router.replace('/(home)')
@@ -17,29 +20,38 @@ const Home = () => {
       } else {
         Alert.alert('An unknown error occurred. Please try again later.')
       }
+      setLoading(false)
     }
   }
 
   return (
     <SafeAreaView style={styles.container}>
-      <Text>Add Brew</Text>
-      {user ? (
-        <>
-          <Button
-            title='Logout'
-            buttonStyle={styles.button}
-            textStyle={styles.buttonText}
-            onPress={handleLogout}
-          />
-          <Link href='/account' style={styles.accountLink}>
-            Account
-          </Link>
-        </>
-      ) : (
-        <Link href='/sign-in' style={styles.accountLink}>
-          Sign in
-        </Link>
-      )}
+      <>
+        {loading ? (
+          <ActivityIndicator size='large' color='#FF4500' />
+        ) : (
+          <>
+            <Text>Add Brew</Text>
+            {user ? (
+              <>
+                <Button
+                  title='Sign out'
+                  buttonStyle={styles.button}
+                  textStyle={styles.buttonText}
+                  onPress={handleSignOut}
+                />
+                <Link href='/account' style={styles.accountLink}>
+                  Account
+                </Link>
+              </>
+            ) : (
+              <Link href='/sign-in' style={styles.accountLink}>
+                Sign in
+              </Link>
+            )}
+          </>
+        )}
+      </>
     </SafeAreaView>
   )
 }

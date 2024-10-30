@@ -1,17 +1,20 @@
-import { View, Text, StyleSheet, Alert } from 'react-native'
+import { View, Text, StyleSheet, Alert, ActivityIndicator } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import Button from '../../components/Button'
 import { Link, useRouter } from 'expo-router'
 import Form from '../../components/Form'
 import { useState } from 'react'
 import { UserAuth } from '../../context/AuthContext'
+
 const SignUp = () => {
+  const [loading, setLoading] = useState(false)
   const [email, setEmail] = useState<string>('')
   const [password, setPassword] = useState<string>('')
   const { createUser } = UserAuth()
   const router = useRouter()
 
   const handleSignUp = async (): Promise<void> => {
+    setLoading(true)
     try {
       await createUser(email, password)
       router.replace('/(home)')
@@ -21,36 +24,43 @@ const SignUp = () => {
       } else {
         Alert.alert('An unknown error occurred. Please try again later.')
       }
+      setLoading(false)
     }
   }
 
   return (
     <SafeAreaView style={styles.container}>
-      <View>
-        <Text style={styles.header}>Sign up</Text>
-        <Form
-          title='Email'
-          value={email}
-          onChangeText={setEmail}
-          placeholder='Email address'
-        />
-        <Form
-          title='Password'
-          value={password}
-          onChangeText={setPassword}
-          placeholder='Password'
-        />
-        <Button
-          title='Sign up'
-          buttonStyle={styles.button}
-          textStyle={styles.buttonText}
-          onPress={handleSignUp}
-        />
-        <Text style={styles.text}>Already have an account?</Text>
-        <Link style={styles.link} href='/sign-in'>
-          Sign in
-        </Link>
-      </View>
+      <>
+        {loading ? (
+          <ActivityIndicator size='large' color='#FF4500' />
+        ) : (
+          <View>
+            <Text style={styles.header}>Sign up</Text>
+            <Form
+              title='Email'
+              value={email}
+              onChangeText={setEmail}
+              placeholder='Email address'
+            />
+            <Form
+              title='Password'
+              value={password}
+              onChangeText={setPassword}
+              placeholder='Password'
+            />
+            <Button
+              title='Sign up'
+              buttonStyle={styles.button}
+              textStyle={styles.buttonText}
+              onPress={handleSignUp}
+            />
+            <Text style={styles.text}>Already have an account?</Text>
+            <Link style={styles.link} href='/sign-in'>
+              Sign in
+            </Link>
+          </View>
+        )}
+      </>
     </SafeAreaView>
   )
 }
