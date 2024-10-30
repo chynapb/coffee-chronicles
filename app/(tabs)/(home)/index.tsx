@@ -3,6 +3,7 @@ import { Text, StyleSheet, Alert, View } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { UserAuth } from '../../../context/AuthContext'
 import Button from '../../../components/Button'
+
 const Home = () => {
   const { user, logout } = UserAuth()
 
@@ -21,7 +22,7 @@ const Home = () => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <Text>My Brews</Text>
+      <Text>Add Brew</Text>
       {user ? (
         <>
           <Button

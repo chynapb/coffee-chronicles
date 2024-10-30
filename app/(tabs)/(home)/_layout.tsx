@@ -1,6 +1,6 @@
+// app/(tabs)/(home)/layout.tsx
 import { Stack } from 'expo-router'
 
-// app/(tabs)/(home)/layout.tsx
 const HomeLayout = () => {
   return (
     <Stack>

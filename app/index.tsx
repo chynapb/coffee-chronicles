@@ -1,8 +1,15 @@
 import { SafeAreaView, StyleSheet, Text, View, StatusBar } from 'react-native'
-import { router } from 'expo-router'
+import { Redirect, router } from 'expo-router'
+import { UserAuth } from '../context/AuthContext'
 import Button from '../components/Button'
 
 export default function App() {
+  const { user } = UserAuth()
+
+  if (user) {
+    return <Redirect href='/(home)' />
+  }
+
   return (
     <SafeAreaView style={styles.container}>
       <Text style={styles.header}>Coffee Chronicles</Text>
