@@ -20,6 +20,7 @@ type AuthContextType = {
   createUser: (email: string, password: string) => Promise<void>
   login: (email: string, password: string) => Promise<User>
   logout: () => Promise<void>
+  isLoading: boolean
 }
 
 type AuthContextProviderProps = {
@@ -30,36 +31,62 @@ const UserContext = createContext<AuthContextType | null>(null)
 
 export const AuthContextProvider = ({ children }: AuthContextProviderProps) => {
   const [user, setUser] = useState<User | null>(null)
+  const [isLoading, setIsLoading] = useState(false)
 
   const createUser = async (email: string, password: string) => {
-    await createUserWithEmailAndPassword(FIREBASE_AUTH, email, password)
-    await setDoc(doc(FIREBASE_DB, 'users', email), {
-      brews: [],
-    })
+    setIsLoading(true)
+    try {
+      await createUserWithEmailAndPassword(FIREBASE_AUTH, email, password)
+      await setDoc(doc(FIREBASE_DB, 'users', email), {
+        brews: [],
+      })
+    } catch (error) {
+      console.error('Error creating user: ', error)
+    } finally {
+      setIsLoading(false)
+    }
   }
 
   const login = async (email: string, password: string): Promise<User> => {
-    const userCredential = await signInWithEmailAndPassword(
-      FIREBASE_AUTH,
-      email,
-      password
-    )
-    return userCredential.user
+    setIsLoading(true)
+    try {
+      const userCredential = await signInWithEmailAndPassword(
+        FIREBASE_AUTH,
+        email,
+        password
+      )
+      return userCredential.user
+    } catch (error) {
+      console.error('Error logging in: ', error)
+      throw error
+    } finally {
+      setIsLoading(false)
+    }
   }
 
-  const logout = () => {
-    return signOut(FIREBASE_AUTH)
+  const logout = async () => {
+    setIsLoading(true)
+    try {
+      await signOut(FIREBASE_AUTH)
+    } catch (error) {
+      console.error('Error logging out: ', error)
+    } finally {
+      setIsLoading(false)
+    }
   }
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(FIREBASE_AUTH, (currentUser) => {
       setUser(currentUser)
+      setIsLoading(false)
     })
     return () => unsubscribe()
   }, [])
 
   return (
-    <UserContext.Provider value={{ user, createUser, logout, login }}>
+    <UserContext.Provider
+      value={{ user, createUser, logout, login, isLoading }}
+    >
       {children}
     </UserContext.Provider>
   )

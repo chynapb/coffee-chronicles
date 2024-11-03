@@ -1,53 +1,37 @@
 import { Link, router } from 'expo-router'
-import { Text, StyleSheet, Alert, ActivityIndicator } from 'react-native'
+import { Text, StyleSheet, ActivityIndicator } from 'react-native'
+import MaterialIcons from '@expo/vector-icons/MaterialIcons'
+import Ionicons from '@expo/vector-icons/Ionicons'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { UserAuth } from '../../../context/AuthContext'
-import Button from '../../../components/Button'
-import { useState } from 'react'
 
 const Home = () => {
-  const [loading, setLoading] = useState(false)
-  const { user, logout } = UserAuth()
-
-  const handleSignOut = async (): Promise<void> => {
-    setLoading(true)
-    try {
-      await logout()
-      router.replace('/(home)')
-    } catch (error: unknown) {
-      if (error instanceof Error) {
-        Alert.alert('Sign up error: ', error.message)
-      } else {
-        Alert.alert('An unknown error occurred. Please try again later.')
-      }
-      setLoading(false)
-    }
-  }
+  const { user, isLoading } = UserAuth()
 
   return (
     <SafeAreaView style={styles.container}>
       <>
-        {loading ? (
+        {isLoading ? (
           <ActivityIndicator size='large' color='#FF4500' />
         ) : (
           <>
-            <Text>Add Brew</Text>
+            <Text>Add brew</Text>
+            <Ionicons name='add-outline' size={60} color='#FF4500' />
             {user ? (
+              <MaterialIcons
+                style={styles.accountButton}
+                name='account-circle'
+                size={40}
+                color='#343450'
+                onPress={() => router.push('/account')}
+              />
+            ) : (
               <>
-                <Button
-                  title='Sign out'
-                  buttonStyle={styles.button}
-                  textStyle={styles.buttonText}
-                  onPress={handleSignOut}
-                />
-                <Link href='/account' style={styles.accountLink}>
-                  Account
+                <Text>Have an account?</Text>
+                <Link push href='/sign-in' style={styles.signInLink}>
+                  Sign in
                 </Link>
               </>
-            ) : (
-              <Link href='/sign-in' style={styles.accountLink}>
-                Sign in
-              </Link>
             )}
           </>
         )}
@@ -62,23 +46,13 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  accountLink: {
+  accountButton: {
+    position: 'absolute',
+    top: 60,
+    right: 20,
+  },
+  signInLink: {
     color: '#FF4500',
-    fontSize: 16,
-    // position: 'absolute',
-    // top: 10,
-    // right: 20,
-  },
-  button: {
-    padding: 10,
-    backgroundColor: '#FF4500',
-    borderRadius: 50,
-    margin: 10,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  buttonText: {
-    color: '#F2F3F4',
     fontSize: 16,
   },
 })

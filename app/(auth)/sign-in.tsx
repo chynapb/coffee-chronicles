@@ -1,37 +1,42 @@
 import { View, Text, StyleSheet, Alert, ActivityIndicator } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
+import Ionicons from '@expo/vector-icons/Ionicons'
 import Button from '../../components/Button'
 import Form from '../../components/Form'
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { Link, useRouter } from 'expo-router'
 import { UserAuth } from '../../context/AuthContext'
 
 const SignIn = () => {
-  const [loading, setLoading] = useState(false)
   const [email, setEmail] = useState<string>('')
   const [password, setPassword] = useState<string>('')
-  const { login } = UserAuth()
+  const { login, isLoading } = UserAuth()
   const router = useRouter()
 
   const handleSignIn = async (): Promise<void> => {
-    setLoading(true)
     try {
       await login(email, password)
       router.replace('/(home)')
-    } catch (error: unknown) {
+    } catch (error) {
       if (error instanceof Error) {
         Alert.alert('Sign in error: ', error.message)
       } else {
         Alert.alert('An unknown error occurred. Please try again later.')
       }
-      setLoading(false)
     }
   }
 
   return (
     <SafeAreaView style={styles.container}>
+      <Ionicons
+        style={styles.backButton}
+        name='chevron-back'
+        size={30}
+        color='#343450'
+        onPress={() => router.back()}
+      />
       <>
-        {loading ? (
+        {isLoading ? (
           <ActivityIndicator size='large' color='#FF4500' />
         ) : (
           <View>
@@ -55,7 +60,7 @@ const SignIn = () => {
               onPress={handleSignIn}
             />
             <Text style={styles.text}>Don't have an account?</Text>
-            <Link style={styles.link} href='/sign-up'>
+            <Link style={styles.link} replace href='/sign-up'>
               Sign up
             </Link>
           </View>
@@ -99,6 +104,11 @@ const styles = StyleSheet.create({
     color: '#F2F3F4',
     fontSize: 16,
     fontWeight: 'bold',
+  },
+  backButton: {
+    position: 'absolute',
+    top: 60,
+    left: 20,
   },
 })
 

@@ -1,10 +1,21 @@
-import { SafeAreaView, StyleSheet, Text, View, StatusBar } from 'react-native'
+import {
+  SafeAreaView,
+  StyleSheet,
+  Text,
+  View,
+  StatusBar,
+  ActivityIndicator,
+} from 'react-native'
 import { Redirect, router } from 'expo-router'
 import { UserAuth } from '../context/AuthContext'
 import Button from '../components/Button'
 
 export default function App() {
-  const { user } = UserAuth()
+  const { user, isLoading } = UserAuth()
+
+  if (isLoading) {
+    return <ActivityIndicator size='large' color='#FF4500' />
+  }
 
   if (user) {
     return <Redirect href='/(home)' />
@@ -25,7 +36,7 @@ export default function App() {
           title='Continue as guest'
           textStyle={styles.buttonText}
           buttonStyle={styles.button}
-          onPress={() => router.push('/(home)')}
+          onPress={() => router.replace('/(home)')}
         />
       </View>
       <StatusBar barStyle='dark-content' />
