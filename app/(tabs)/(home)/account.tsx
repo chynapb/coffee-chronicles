@@ -27,7 +27,7 @@ const Account = () => {
         style={styles.backButton}
         name='chevron-back'
         size={30}
-        color='#343450'
+        color='#FF4500'
         onPress={() => router.back()}
       />
       {isLoading ? (
@@ -72,8 +72,8 @@ const styles = StyleSheet.create({
   },
   backButton: {
     position: 'absolute',
-    top: 60,
-    left: 20,
+    top: 65,
+    left: 15,
   },
 })
 

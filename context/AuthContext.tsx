@@ -38,7 +38,7 @@ export const AuthContextProvider = ({ children }: AuthContextProviderProps) => {
     try {
       await createUserWithEmailAndPassword(FIREBASE_AUTH, email, password)
       await setDoc(doc(FIREBASE_DB, 'users', email), {
-        brews: [],
+        createdAt: new Date(),
       })
     } catch (error) {
       console.error('Error creating user: ', error)

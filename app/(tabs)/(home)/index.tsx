@@ -1,9 +1,9 @@
 import { Link, router } from 'expo-router'
 import { Text, StyleSheet, ActivityIndicator } from 'react-native'
 import MaterialIcons from '@expo/vector-icons/MaterialIcons'
-import Ionicons from '@expo/vector-icons/Ionicons'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { UserAuth } from '../../../context/AuthContext'
+import AddBrew from '../../../components/AddBrew'
 
 const Home = () => {
   const { user, isLoading } = UserAuth()
@@ -15,8 +15,7 @@ const Home = () => {
           <ActivityIndicator size='large' color='#FF4500' />
         ) : (
           <>
-            <Text>Add brew</Text>
-            <Ionicons name='add-outline' size={60} color='#FF4500' />
+            <AddBrew />
             {user ? (
               <MaterialIcons
                 style={styles.accountButton}
@@ -48,7 +47,7 @@ const styles = StyleSheet.create({
   },
   accountButton: {
     position: 'absolute',
-    top: 60,
+    top: 65,
     right: 20,
   },
   signInLink: {

@@ -46,7 +46,7 @@ const TabsLayout = () => {
                 title: 'Past Brews',
                 headerShown: false,
                 tabBarIcon: ({ color }) => (
-                  <AntDesign name='hearto' size={24} color={color} />
+                  <AntDesign name='clockcircleo' size={24} color={color} />
                 ),
               }
         }
