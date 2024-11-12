@@ -4,7 +4,7 @@ type ButtonProps = {
   title: string
   textStyle?: StyleProp<TextStyle>
   buttonStyle?: StyleProp<ViewStyle>
-  onPress: () => void
+  onPress?: () => void
 }
 
 const Button = ({ title, textStyle, buttonStyle, onPress }: ButtonProps) => {

@@ -13,32 +13,34 @@ import Button from '../components/Button'
 export default function App() {
   const { user, isLoading } = UserAuth()
 
-  if (isLoading) {
-    return <ActivityIndicator size='large' color='#FF4500' />
-  }
-
   if (user) {
     return <Redirect href='/(home)' />
   }
 
   return (
     <SafeAreaView style={styles.container}>
-      <Text style={styles.header}>Coffee Chronicles</Text>
-      <Text style={styles.text}>Find your perfect brew</Text>
-      <View style={styles.buttonContainer}>
-        <Button
-          title='Sign in'
-          textStyle={styles.buttonText}
-          buttonStyle={styles.button}
-          onPress={() => router.push('/sign-in')}
-        />
-        <Button
-          title='Continue as guest'
-          textStyle={styles.buttonText}
-          buttonStyle={styles.button}
-          onPress={() => router.replace('/(home)')}
-        />
-      </View>
+      {isLoading ? (
+        <ActivityIndicator size='large' color='#FF4500' />
+      ) : (
+        <>
+          <Text style={styles.header}>Coffee Chronicles</Text>
+          <Text style={styles.text}>Find your perfect brew</Text>
+          <View style={styles.buttonContainer}>
+            <Button
+              title='Sign in'
+              textStyle={styles.buttonText}
+              buttonStyle={styles.button}
+              onPress={() => router.push('/sign-in')}
+            />
+            <Button
+              title='Continue as guest'
+              textStyle={styles.buttonText}
+              buttonStyle={styles.button}
+              onPress={() => router.replace('/(home)')}
+            />
+          </View>
+        </>
+      )}
       <StatusBar barStyle='dark-content' />
     </SafeAreaView>
   )
