@@ -26,7 +26,7 @@ const AddBrew = () => {
           setModalVisible(!modalVisible)
         }}
       >
-        <ScrollView>
+        <ScrollView showsVerticalScrollIndicator={false}>
           <Pressable onPress={() => setModalVisible(!modalVisible)}>
             <Ionicons
               name='chevron-back'
