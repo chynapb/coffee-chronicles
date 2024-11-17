@@ -126,8 +126,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   header: {
-    marginBottom: 20,
-    marginTop: 50,
+    marginTop: 25,
+    marginBottom: 35,
     fontSize: 24,
     color: '#343450',
   },

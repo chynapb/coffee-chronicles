@@ -5,7 +5,7 @@ import Brew from '../../components/Brew'
 const TopBrews = () => {
   return (
     <SafeAreaView style={styles.container}>
-      <Text>Top Brews</Text>
+      <Text style={styles.header}>Top Brews</Text>
       <Brew />
     </SafeAreaView>
   )
@@ -16,6 +16,11 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  header: {
+    marginTop: 25,
+    fontSize: 24,
+    color: '#343450',
   },
 })
 
