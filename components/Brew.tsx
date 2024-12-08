@@ -10,14 +10,14 @@ const Brew = () => {
         <View style={styles.brewContainer}>
           <AntDesign
             name='edit'
-            size={24}
+            size={22}
             color='#343450'
             style={styles.edit}
             onPress={() => console.log('Edit brew')}
           />
           <AntDesign
             name='delete'
-            size={24}
+            size={22}
             color='#343450'
             style={styles.delete}
             onPress={() => console.log('Deleted')}
@@ -66,12 +66,15 @@ const styles = StyleSheet.create({
   },
   bold: {
     fontWeight: 'bold',
+    color: '#343450',
   },
   header: {
     marginBottom: 8,
     fontSize: 20,
+    color: '#343450',
   },
   detail: {
+    color: '#343450',
     marginVertical: 1,
   },
   brewContainer: {

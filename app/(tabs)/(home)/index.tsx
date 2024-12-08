@@ -4,6 +4,9 @@ import MaterialIcons from '@expo/vector-icons/MaterialIcons'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { UserAuth } from '../../../context/AuthContext'
 import AddBrew from '../../../components/AddBrew'
+import { useEffect } from 'react'
+import { collection, getDocs } from 'firebase/firestore'
+import { FIREBASE_DB } from '../../../firebaseConfig'
 
 const Home = () => {
   const { user, isLoading } = UserAuth()

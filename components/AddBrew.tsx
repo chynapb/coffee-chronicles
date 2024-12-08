@@ -7,14 +7,116 @@ import {
   View,
   TextInput,
   ScrollView,
+  Alert,
 } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import Ionicons from '@expo/vector-icons/Ionicons'
 import FontAwesome from '@expo/vector-icons/FontAwesome'
 import Button from './Button'
+import { getAuth } from 'firebase/auth'
+import { collection, doc, setDoc } from 'firebase/firestore'
+import { FIREBASE_DB } from '../firebaseConfig'
+import { v4 as uuidv4 } from 'uuid' // For generating unique IDs for guests
+import AsyncStorage from '@react-native-async-storage/async-storage'
+
+type BrewData = {
+  bean: string
+  roaster: string
+  grinder: string
+  grinderSetting: string
+  brewMethod: string
+  waterRatio: string
+  waterTemp: string
+  recipe: string
+  notes: string
+}
 
 const AddBrew = () => {
   const [modalVisible, setModalVisible] = useState(false)
+  const [brewData, setBrewData] = useState<BrewData>({
+    bean: '',
+    roaster: '',
+    grinder: '',
+    grinderSetting: '',
+    brewMethod: '',
+    waterRatio: '',
+    waterTemp: '',
+    recipe: '',
+    notes: '',
+  })
+
+  const handleChange = (field: keyof BrewData, value: string) => {
+    setBrewData((prevState) => ({
+      ...prevState,
+      [field]: value,
+    }))
+  }
+
+  const handleSaveBrew = async () => {
+    try {
+      const isValid = Object.values(brewData).every(
+        (value) => typeof value === 'string' && value.trim() !== ''
+      )
+
+      if (!isValid) {
+        Alert.alert('Error', 'Please fill out all fields.')
+        return
+      }
+
+      // Get user ID
+      let userId = getAuth().currentUser?.uid
+
+      if (!userId) {
+        userId = await getGuestId()
+      }
+
+      // Get brew ID
+      const brewId = `brew-${Date.now()}`
+      const brewRef = doc(
+        collection(FIREBASE_DB, `users/${userId}/brews`),
+        brewId
+      )
+
+      await setDoc(brewRef, {
+        ...brewData,
+        createdAt: new Date().toISOString(),
+      })
+
+      Alert.alert('Success', 'Brew saved!')
+      setBrewData({
+        bean: '',
+        roaster: '',
+        grinder: '',
+        grinderSetting: '',
+        brewMethod: '',
+        waterRatio: '',
+        waterTemp: '',
+        recipe: '',
+        notes: '',
+      })
+      setModalVisible(!modalVisible)
+    } catch (error) {
+      console.error('Error saving brew: ', error)
+      Alert.alert('Error', 'Failed to save brew. Please try again')
+    }
+  }
+
+  // Create or retrieve guest ID
+  const getGuestId = async (): Promise<string> => {
+    try {
+      const storedGuestId = await AsyncStorage.getItem('guestId')
+      if (storedGuestId) {
+        return storedGuestId
+      }
+
+      const newGuestId = uuidv4()
+      await AsyncStorage.setItem('guestId', newGuestId)
+      return newGuestId
+    } catch (error) {
+      console.error('Error getting guest ID: ', error)
+      throw new Error('Could not generate guest ID.')
+    }
+  }
 
   return (
     <SafeAreaView style={styles.container}>
@@ -38,7 +140,21 @@ const AddBrew = () => {
           <View style={styles.container}>
             <Text style={styles.header}>Brew Details</Text>
             <View style={styles.inputContainer}>
-              <Text style={styles.inputTitle}>Bean</Text>
+              {Object.keys(brewData).map((field) => (
+                <>
+                  {/* <Text style={styles.inputTitle}>{field}</Text> */}
+                  <TextInput
+                    key={field}
+                    style={styles.input}
+                    placeholder={field.charAt(0).toUpperCase() + field.slice(1)}
+                    value={brewData[field as keyof BrewData]}
+                    onChangeText={(value) =>
+                      handleChange(field as keyof BrewData, value)
+                    }
+                  />
+                </>
+              ))}
+              {/* <Text style={styles.inputTitle}>Bean</Text>
               <TextInput
                 style={styles.input}
                 placeholder='Ex: Ethiopia Chelbesa'
@@ -101,11 +217,12 @@ const AddBrew = () => {
                 style={styles.notesInput}
                 placeholder='Ex: Slighty sour finish - try grinding finer.'
                 placeholderTextColor='#979a9a'
-              />
+              /> */}
               <Button
                 title='Add Brew'
                 textStyle={styles.buttonText}
                 buttonStyle={styles.button}
+                onPress={handleSaveBrew}
               />
             </View>
           </View>
@@ -137,6 +254,7 @@ const styles = StyleSheet.create({
   },
   inputTitle: {
     fontSize: 16,
+    color: '#343450',
   },
   input: {
     width: 225,
