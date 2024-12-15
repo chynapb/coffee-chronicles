@@ -1,3 +1,4 @@
+import React from 'react'
 import { useState } from 'react'
 import {
   Modal as ReactModal,
@@ -16,7 +17,6 @@ import Button from './Button'
 import { getAuth } from 'firebase/auth'
 import { collection, doc, setDoc } from 'firebase/firestore'
 import { FIREBASE_DB } from '../firebaseConfig'
-import { v4 as uuidv4 } from 'uuid' // For generating unique IDs for guests
 import AsyncStorage from '@react-native-async-storage/async-storage'
 
 type BrewData = {
@@ -28,6 +28,7 @@ type BrewData = {
   waterRatio: string
   waterTemp: string
   recipe: string
+  // rating: tbd
   notes: string
 }
 
@@ -42,6 +43,7 @@ const AddBrew = () => {
     waterRatio: '',
     waterTemp: '',
     recipe: '',
+    // rating: tbd
     notes: '',
   })
 
@@ -66,6 +68,7 @@ const AddBrew = () => {
       // Get user ID
       let userId = getAuth().currentUser?.uid
 
+      // Get guest ID if not logged in
       if (!userId) {
         userId = await getGuestId()
       }
@@ -92,6 +95,7 @@ const AddBrew = () => {
         waterRatio: '',
         waterTemp: '',
         recipe: '',
+        // rating: tbd
         notes: '',
       })
       setModalVisible(!modalVisible)
@@ -104,17 +108,23 @@ const AddBrew = () => {
   // Create or retrieve guest ID
   const getGuestId = async (): Promise<string> => {
     try {
-      const storedGuestId = await AsyncStorage.getItem('guestId')
+      // Check if guest ID exists
+      const storedGuestId = await AsyncStorage.getItem('guestID')
       if (storedGuestId) {
         return storedGuestId
       }
 
-      const newGuestId = uuidv4()
-      await AsyncStorage.setItem('guestId', newGuestId)
+      // If no ID, generate new one
+      const timestamp = Date.now()
+      const randomSuffix = Math.random().toString(36).substring(2, 8)
+      const newGuestId = `guest-${timestamp}-${randomSuffix}`
+
+      // Save guest ID to storage
+      await AsyncStorage.setItem('guestID', newGuestId)
       return newGuestId
     } catch (error) {
-      console.error('Error getting guest ID: ', error)
-      throw new Error('Could not generate guest ID.')
+      console.error('Error getting or setting guest ID:', error)
+      throw new Error('Could not generate guest ID')
     }
   }
 
