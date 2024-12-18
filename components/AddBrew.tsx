@@ -32,6 +32,13 @@ type BrewData = {
   notes: string
 }
 
+const placeholders: Record<string, string> = {
+  grinderSetting: 'Grinder Setting',
+  brewMethod: 'Brew Method',
+  waterRatio: 'Water Ratio',
+  waterTemp: 'Water Temp',
+}
+
 const AddBrew = () => {
   const [modalVisible, setModalVisible] = useState(false)
   const [brewData, setBrewData] = useState<BrewData>({
@@ -151,18 +158,21 @@ const AddBrew = () => {
             <Text style={styles.header}>Brew Details</Text>
             <View style={styles.inputContainer}>
               {Object.keys(brewData).map((field) => (
-                <>
-                  {/* <Text style={styles.inputTitle}>{field}</Text> */}
-                  <TextInput
-                    key={field}
-                    style={styles.input}
-                    placeholder={field.charAt(0).toUpperCase() + field.slice(1)}
-                    value={brewData[field as keyof BrewData]}
-                    onChangeText={(value) =>
-                      handleChange(field as keyof BrewData, value)
-                    }
-                  />
-                </>
+                // <>
+                //   <Text style={styles.inputTitle}>{field}</Text>
+                <TextInput
+                  key={field}
+                  style={styles.input}
+                  placeholder={
+                    placeholders[field] ||
+                    field.charAt(0).toUpperCase() + field.slice(1)
+                  }
+                  value={brewData[field as keyof BrewData]}
+                  onChangeText={(value) =>
+                    handleChange(field as keyof BrewData, value)
+                  }
+                />
+                // </>
               ))}
               {/* <Text style={styles.inputTitle}>Bean</Text>
               <TextInput
