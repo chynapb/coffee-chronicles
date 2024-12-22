@@ -4,6 +4,7 @@ import { SafeAreaView } from 'react-native-safe-area-context'
 import Button from '../../../components/Button'
 import { UserAuth } from '../../../context/AuthContext'
 import { router } from 'expo-router'
+import React from 'react'
 
 const Account = () => {
   const { user, logout, isLoading } = UserAuth()

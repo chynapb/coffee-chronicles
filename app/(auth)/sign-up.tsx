@@ -6,6 +6,7 @@ import { Link, useRouter } from 'expo-router'
 import Form from '../../components/Form'
 import { useState } from 'react'
 import { UserAuth } from '../../context/AuthContext'
+import React from 'react'
 
 const SignUp = () => {
   const [email, setEmail] = useState<string>('')

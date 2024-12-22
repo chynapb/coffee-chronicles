@@ -1,7 +1,14 @@
+import React, { useEffect, useState } from 'react'
 import { View, Text, StyleSheet, ScrollView } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import FontAwesome from '@expo/vector-icons/FontAwesome'
 import AntDesign from '@expo/vector-icons/AntDesign'
+import { getAuth } from 'firebase/auth'
+import { collection, doc, onSnapshot, setDoc } from 'firebase/firestore'
+import { FIREBASE_DB } from '../firebaseConfig'
+import AsyncStorage from '@react-native-async-storage/async-storage'
+import { BrewData } from './AddBrew'
+import { UserAuth } from '../context/AuthContext'
 
 const Brew = () => {
   return (
@@ -27,10 +34,10 @@ const Brew = () => {
             <Text style={styles.bold}>Bean:</Text> Ethiopia
           </Text>
           <Text style={styles.detail}>
-            <Text style={styles.bold}>Brew method:</Text> V60
+            <Text style={styles.bold}>Grinder setting:</Text> 60 clicks
           </Text>
           <Text style={styles.detail}>
-            <Text style={styles.bold}>Grinder setting:</Text> 60 clicks
+            <Text style={styles.bold}>Brew method:</Text> V60
           </Text>
           <Text style={styles.detail}>
             <Text style={styles.bold}>Brew time:</Text> 2:45

@@ -14,29 +14,14 @@ import { SafeAreaView } from 'react-native-safe-area-context'
 import Ionicons from '@expo/vector-icons/Ionicons'
 import FontAwesome from '@expo/vector-icons/FontAwesome'
 import Button from './Button'
-import { getAuth } from 'firebase/auth'
-import { collection, doc, setDoc } from 'firebase/firestore'
-import { FIREBASE_DB } from '../firebaseConfig'
-import AsyncStorage from '@react-native-async-storage/async-storage'
-
-type BrewData = {
-  bean: string
-  roaster: string
-  grinder: string
-  grinderSetting: string
-  brewMethod: string
-  waterRatio: string
-  waterTemp: string
-  recipe: string
-  // rating: tbd
-  notes: string
-}
+import { saveBrew, BrewData } from '../services/firestore/brewsService'
 
 const placeholders: Record<string, string> = {
-  grinderSetting: 'Grinder Setting',
-  brewMethod: 'Brew Method',
-  waterRatio: 'Water Ratio',
-  waterTemp: 'Water Temp',
+  grinderSetting: 'Grinder setting',
+  brewMethod: 'Brew method',
+  waterRatio: 'Water ratio',
+  waterTemp: 'Water temp',
+  brewTime: 'Brew time',
 }
 
 const AddBrew = () => {
@@ -50,7 +35,8 @@ const AddBrew = () => {
     waterRatio: '',
     waterTemp: '',
     recipe: '',
-    // rating: tbd
+    brewTime: '',
+    rating: '',
     notes: '',
   })
 
@@ -61,7 +47,7 @@ const AddBrew = () => {
     }))
   }
 
-  const handleSaveBrew = async () => {
+  const handleSaveBrew = async (): Promise<void> => {
     try {
       const isValid = Object.values(brewData).every(
         (value) => typeof value === 'string' && value.trim() !== ''
@@ -72,26 +58,7 @@ const AddBrew = () => {
         return
       }
 
-      // Get user ID
-      let userId = getAuth().currentUser?.uid
-
-      // Get guest ID if not logged in
-      if (!userId) {
-        userId = await getGuestId()
-      }
-
-      // Get brew ID
-      const brewId = `brew-${Date.now()}`
-      const brewRef = doc(
-        collection(FIREBASE_DB, `users/${userId}/brews`),
-        brewId
-      )
-
-      await setDoc(brewRef, {
-        ...brewData,
-        createdAt: new Date().toISOString(),
-      })
-
+      await saveBrew(brewData)
       Alert.alert('Success', 'Brew saved!')
       setBrewData({
         bean: '',
@@ -102,36 +69,14 @@ const AddBrew = () => {
         waterRatio: '',
         waterTemp: '',
         recipe: '',
-        // rating: tbd
+        brewTime: '',
+        rating: '',
         notes: '',
       })
-      setModalVisible(!modalVisible)
+      setModalVisible(false)
     } catch (error) {
       console.error('Error saving brew: ', error)
-      Alert.alert('Error', 'Failed to save brew. Please try again')
-    }
-  }
-
-  // Create or retrieve guest ID
-  const getGuestId = async (): Promise<string> => {
-    try {
-      // Check if guest ID exists
-      const storedGuestId = await AsyncStorage.getItem('guestID')
-      if (storedGuestId) {
-        return storedGuestId
-      }
-
-      // If no ID, generate new one
-      const timestamp = Date.now()
-      const randomSuffix = Math.random().toString(36).substring(2, 8)
-      const newGuestId = `guest-${timestamp}-${randomSuffix}`
-
-      // Save guest ID to storage
-      await AsyncStorage.setItem('guestID', newGuestId)
-      return newGuestId
-    } catch (error) {
-      console.error('Error getting or setting guest ID:', error)
-      throw new Error('Could not generate guest ID')
+      Alert.alert('Error', 'Failed to save brew. Please try again.')
     }
   }
 
@@ -158,8 +103,6 @@ const AddBrew = () => {
             <Text style={styles.header}>Brew Details</Text>
             <View style={styles.inputContainer}>
               {Object.keys(brewData).map((field) => (
-                // <>
-                //   <Text style={styles.inputTitle}>{field}</Text>
                 <TextInput
                   key={field}
                   style={styles.input}
@@ -167,12 +110,12 @@ const AddBrew = () => {
                     placeholders[field] ||
                     field.charAt(0).toUpperCase() + field.slice(1)
                   }
+                  placeholderTextColor='#979a9a'
                   value={brewData[field as keyof BrewData]}
                   onChangeText={(value) =>
                     handleChange(field as keyof BrewData, value)
                   }
                 />
-                // </>
               ))}
               {/* <Text style={styles.inputTitle}>Bean</Text>
               <TextInput

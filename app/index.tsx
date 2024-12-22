@@ -9,6 +9,7 @@ import {
 import { Redirect, router } from 'expo-router'
 import { UserAuth } from '../context/AuthContext'
 import Button from '../components/Button'
+import React from 'react'
 
 export default function App() {
   const { user, isLoading } = UserAuth()
