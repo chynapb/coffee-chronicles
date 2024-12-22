@@ -1,57 +1,71 @@
-import React, { useEffect, useState } from 'react'
-import { View, Text, StyleSheet, ScrollView } from 'react-native'
-import { SafeAreaView } from 'react-native-safe-area-context'
+import React from 'react'
+import { View, Text, StyleSheet } from 'react-native'
 import FontAwesome from '@expo/vector-icons/FontAwesome'
 import AntDesign from '@expo/vector-icons/AntDesign'
-import { getAuth } from 'firebase/auth'
-import { collection, doc, onSnapshot, setDoc } from 'firebase/firestore'
-import { FIREBASE_DB } from '../firebaseConfig'
-import AsyncStorage from '@react-native-async-storage/async-storage'
-import { BrewData } from './AddBrew'
-import { UserAuth } from '../context/AuthContext'
+import moment from 'moment'
 
-const Brew = () => {
+type BrewProps = {
+  id: string
+  createdAt: string
+  bean: string
+  grinderSetting: string
+  brewMethod: string
+  brewTime: string
+  rating: number
+}
+
+const Brew = ({
+  id,
+  createdAt,
+  bean,
+  grinderSetting,
+  brewMethod,
+  brewTime,
+  rating,
+}: BrewProps) => {
+  const formattedCreatedAt = moment(createdAt).format('MM.DD.YYYY')
+
   return (
-    <SafeAreaView style={styles.container}>
-      <ScrollView showsVerticalScrollIndicator={false}>
-        <View style={styles.brewContainer}>
-          <AntDesign
-            name='edit'
-            size={22}
-            color='#343450'
-            style={styles.edit}
-            onPress={() => console.log('Edit brew')}
+    <View key={id} style={styles.brewContainer}>
+      <AntDesign
+        name='edit'
+        size={22}
+        color='#343450'
+        style={styles.edit}
+        onPress={() => console.log('Edit brew')}
+      />
+      <AntDesign
+        name='delete'
+        size={22}
+        color='#343450'
+        style={styles.delete}
+        onPress={() => console.log('Deleted')}
+      />
+      <Text style={styles.header}>{formattedCreatedAt}</Text>
+      <Text style={styles.detail}>
+        <Text style={styles.bold}>Bean:</Text> {bean}
+      </Text>
+      <Text style={styles.detail}>
+        <Text style={styles.bold}>Grinder setting:</Text> {grinderSetting}
+      </Text>
+      <Text style={styles.detail}>
+        <Text style={styles.bold}>Brew method:</Text> {brewMethod}
+      </Text>
+      <Text style={styles.detail}>
+        <Text style={styles.bold}>Brew time:</Text> {brewTime}
+      </Text>
+      <Text style={styles.detail}>
+        <Text style={styles.bold}>Rating:</Text>
+        {[...Array(5)].map((_, index) => (
+          <FontAwesome
+            key={index}
+            name={index < rating ? 'star' : 'star-o'}
+            size={20}
+            style={styles.star}
           />
-          <AntDesign
-            name='delete'
-            size={22}
-            color='#343450'
-            style={styles.delete}
-            onPress={() => console.log('Deleted')}
-          />
-          <Text style={styles.header}>11.14.2024</Text>
-          <Text style={styles.detail}>
-            <Text style={styles.bold}>Bean:</Text> Ethiopia
-          </Text>
-          <Text style={styles.detail}>
-            <Text style={styles.bold}>Grinder setting:</Text> 60 clicks
-          </Text>
-          <Text style={styles.detail}>
-            <Text style={styles.bold}>Brew method:</Text> V60
-          </Text>
-          <Text style={styles.detail}>
-            <Text style={styles.bold}>Brew time:</Text> 2:45
-          </Text>
-          <Text style={styles.detail}>
-            <Text style={styles.bold}>Rating:</Text>
-            <FontAwesome name='star-o' size={20} style={styles.star} />
-            <FontAwesome name='star-o' size={20} style={styles.star} />
-            <FontAwesome name='star-o' size={20} style={styles.star} />
-            <FontAwesome name='star-o' size={20} style={styles.star} />
-          </Text>
-        </View>
-      </ScrollView>
-    </SafeAreaView>
+        ))}
+      </Text>
+    </View>
   )
 }
 

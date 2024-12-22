@@ -1,12 +1,10 @@
 import { Text, StyleSheet } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
-import Brew from '../../components/Brew'
 
 const TopBrews = () => {
   return (
     <SafeAreaView style={styles.container}>
       <Text style={styles.header}>Top Brews</Text>
-      <Brew />
     </SafeAreaView>
   )
 }
