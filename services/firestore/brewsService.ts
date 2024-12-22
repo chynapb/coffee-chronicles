@@ -10,10 +10,10 @@ export type BrewData = {
   grinderSetting: string
   brewMethod: string
   waterRatio: string
-  waterTemp: string
+  waterTemp: number
   recipe: string
   brewTime: string
-  rating: string
+  rating: number
   notes: string
   createdAt?: string
 }

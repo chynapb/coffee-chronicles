@@ -33,32 +33,62 @@ const AddBrew = () => {
     grinderSetting: '',
     brewMethod: '',
     waterRatio: '',
-    waterTemp: '',
+    waterTemp: 0,
     recipe: '',
     brewTime: '',
-    rating: '',
+    rating: 0,
     notes: '',
   })
 
   const handleChange = (field: keyof BrewData, value: string) => {
+    if (field === 'rating') {
+      const parsedRating = parseFloat(value)
+      setBrewData((prevState) => ({
+        ...prevState,
+        [field]: isNaN(parsedRating) ? 0 : parsedRating,
+      }))
+    } else {
+      setBrewData((prevState) => ({
+        ...prevState,
+        [field]: value,
+      }))
+    }
+  }
+
+  const handleStarPress = (selectedRating: number) => {
     setBrewData((prevState) => ({
       ...prevState,
-      [field]: value,
+      rating: selectedRating,
     }))
   }
 
   const handleSaveBrew = async (): Promise<void> => {
     try {
-      const isValid = Object.values(brewData).every(
-        (value) => typeof value === 'string' && value.trim() !== ''
+      if (!brewData.rating) {
+        Alert.alert('Error', 'Please select a rating.')
+        return
+      }
+
+      // Validate required fields
+      const requiredFields = [
+        'bean',
+        'grinderSetting',
+        'brewMethod',
+        'brewTime',
+        'rating',
+      ]
+
+      const missingField = requiredFields.find(
+        (field) => !brewData[field as keyof BrewData]?.toString().trim()
       )
 
-      if (!isValid) {
-        Alert.alert('Error', 'Please fill out all fields.')
+      if (missingField) {
+        Alert.alert('Error', `Please fill out all required fields.`)
         return
       }
 
       await saveBrew(brewData)
+
       Alert.alert('Success', 'Brew saved!')
       setBrewData({
         bean: '',
@@ -67,10 +97,10 @@ const AddBrew = () => {
         grinderSetting: '',
         brewMethod: '',
         waterRatio: '',
-        waterTemp: '',
+        waterTemp: 0,
         recipe: '',
         brewTime: '',
-        rating: '',
+        rating: 0,
         notes: '',
       })
       setModalVisible(false)
@@ -102,85 +132,40 @@ const AddBrew = () => {
           <View style={styles.container}>
             <Text style={styles.header}>Brew Details</Text>
             <View style={styles.inputContainer}>
-              {Object.keys(brewData).map((field) => (
-                <TextInput
-                  key={field}
-                  style={styles.input}
-                  placeholder={
-                    placeholders[field] ||
-                    field.charAt(0).toUpperCase() + field.slice(1)
-                  }
-                  placeholderTextColor='#979a9a'
-                  value={brewData[field as keyof BrewData]}
-                  onChangeText={(value) =>
-                    handleChange(field as keyof BrewData, value)
-                  }
-                />
-              ))}
-              {/* <Text style={styles.inputTitle}>Bean</Text>
-              <TextInput
-                style={styles.input}
-                placeholder='Ex: Ethiopia Chelbesa'
-                placeholderTextColor='#979a9a'
-              />
-              <Text style={styles.inputTitle}>Roaster</Text>
-              <TextInput
-                style={styles.input}
-                placeholder='Ex: Onyx Coffee'
-                placeholderTextColor='#979a9a'
-              />
-              <Text style={styles.inputTitle}>Grinder</Text>
-              <TextInput
-                style={styles.input}
-                placeholder='Ex: Comandante C40'
-                placeholderTextColor='#979a9a'
-              />
-              <Text style={styles.inputTitle}>Grinder setting</Text>
-              <TextInput
-                style={styles.input}
-                placeholder='Ex: 20 clicks'
-                placeholderTextColor='#979a9a'
-              />
-              <Text style={styles.inputTitle}>Brew method</Text>
-              <TextInput
-                style={styles.input}
-                placeholder='Ex: V60'
-                placeholderTextColor='#979a9a'
-              />
-              <Text style={styles.inputTitle}>Water ratio</Text>
-              <TextInput
-                style={styles.input}
-                placeholder='Ex: 16:1'
-                placeholderTextColor='#979a9a'
-              />
-              <Text style={styles.inputTitle}>Water temperature</Text>
-
-              <TextInput
-                style={styles.input}
-                placeholder='Ex: 205 F'
-                placeholderTextColor='#979a9a'
-              />
-              <Text style={styles.inputTitle}>Recipe</Text>
-              <TextInput
-                style={styles.input}
-                placeholder='Ex: Tetsu 4:6 method'
-                placeholderTextColor='#979a9a'
-              />
-              <Text style={styles.inputTitle}>Rating</Text>
+              {Object.keys(brewData)
+                .filter((field) => field !== 'rating')
+                .map((field) => (
+                  <TextInput
+                    key={field}
+                    style={styles.input}
+                    placeholder={
+                      placeholders[field] ||
+                      field.charAt(0).toUpperCase() + field.slice(1)
+                    }
+                    placeholderTextColor='#979a9a'
+                    value={
+                      field === 'waterTemp' &&
+                      brewData[field as keyof BrewData] === 0
+                        ? ''
+                        : brewData[field as keyof BrewData]?.toString() || ''
+                    }
+                    onChangeText={(value) =>
+                      handleChange(field as keyof BrewData, value)
+                    }
+                  />
+                ))}
               <View style={styles.ratingContainer}>
-                <FontAwesome name='star-o' size={35} style={styles.star} />
-                <FontAwesome name='star-o' size={35} style={styles.star} />
-                <FontAwesome name='star-o' size={35} style={styles.star} />
-                <FontAwesome name='star-o' size={35} style={styles.star} />
-                <FontAwesome name='star-o' size={35} style={styles.star} />
+                {[1, 2, 3, 4, 5].map((star) => (
+                  <Pressable key={star} onPress={() => handleStarPress(star)}>
+                    <FontAwesome
+                      name={brewData.rating >= star ? 'star' : 'star-o'}
+                      size={35}
+                      style={styles.star}
+                      color={brewData.rating >= star ? '#FFD700' : '#C0C0C0'}
+                    />
+                  </Pressable>
+                ))}
               </View>
-              <Text style={styles.inputTitle}>Notes</Text>
-              <TextInput
-                multiline
-                style={styles.notesInput}
-                placeholder='Ex: Slighty sour finish - try grinding finer.'
-                placeholderTextColor='#979a9a'
-              /> */}
               <Button
                 title='Add Brew'
                 textStyle={styles.buttonText}
@@ -238,15 +223,6 @@ const styles = StyleSheet.create({
   star: {
     marginHorizontal: 3,
     color: '#FFBF00',
-  },
-  notesInput: {
-    width: 225,
-    margin: 5,
-    borderWidth: 1,
-    borderRadius: 15,
-    borderColor: '#979a9a',
-    padding: 10,
-    paddingRight: 40,
   },
   backButton: {
     position: 'absolute',
