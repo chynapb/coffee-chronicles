@@ -2,26 +2,34 @@ import { Text, StyleSheet, ActivityIndicator, ScrollView } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import Brew from '../../components/Brew'
 import React, { useEffect, useState } from 'react'
-import { getUserBrews } from '../../services/firestore/brewsService'
+import { UserAuth } from '../../context/AuthContext'
+import { brewListener } from '../../services/firestore/brewsService'
 
 const PastBrews = () => {
   const [brews, setBrews] = useState<any[]>([])
   const [isLoading, setIsLoading] = useState(true)
+  const { user } = UserAuth()
 
   useEffect(() => {
-    const fetchBrews = async () => {
-      try {
-        const userBrews = await getUserBrews()
-        setBrews(userBrews)
-      } catch (error) {
-        console.error('Error fetching brews: ', error)
-      } finally {
-        setIsLoading(false)
-      }
+    if (!user) {
+      setIsLoading(false)
+      return
     }
 
-    fetchBrews()
-  }, [])
+    const unsubscribe = brewListener(
+      user?.uid,
+      (fetchedBrews) => {
+        setBrews(fetchedBrews)
+        setIsLoading(false)
+      },
+      (error) => {
+        console.error('Error fetching brews: ', error)
+        setIsLoading(false)
+      }
+    )
+
+    return () => unsubscribe()
+  }, [user])
 
   return (
     <SafeAreaView style={styles.container}>
@@ -44,7 +52,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   header: {
-    marginTop: 25,
+    margin: 25,
     fontSize: 24,
     color: '#343450',
   },

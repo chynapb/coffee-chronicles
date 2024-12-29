@@ -14,7 +14,8 @@ import { SafeAreaView } from 'react-native-safe-area-context'
 import Ionicons from '@expo/vector-icons/Ionicons'
 import FontAwesome from '@expo/vector-icons/FontAwesome'
 import Button from './Button'
-import { saveBrew, BrewData } from '../services/firestore/brewsService'
+import { saveBrew } from '../services/firestore/brewsService'
+import { BrewData } from '../types/BrewData'
 
 const placeholders: Record<string, string> = {
   grinderSetting: 'Grinder setting',

@@ -16,7 +16,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   header: {
-    marginTop: 25,
+    margin: 25,
     fontSize: 24,
     color: '#343450',
   },

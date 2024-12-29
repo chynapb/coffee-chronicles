@@ -1,69 +1,66 @@
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { FIREBASE_DB } from '../../firebaseConfig'
-import { collection, doc, getDocs, setDoc } from 'firebase/firestore'
+import {
+  addDoc,
+  collection,
+  doc,
+  getDocs,
+  onSnapshot,
+  orderBy,
+  query,
+} from 'firebase/firestore'
 import { getAuth } from '@firebase/auth'
+import uuid from 'react-native-uuid'
+import { BrewData } from '../../types/BrewData'
 
-export type BrewData = {
-  bean: string
-  roaster: string
-  grinder: string
-  grinderSetting: string
-  brewMethod: string
-  waterRatio: string
-  waterTemp: number | string
-  recipe: string
-  brewTime: string
-  rating: number
-  notes: string
-  createdAt?: string
+const getBrewsCollectionRef = (userId: string) => {
+  return collection(doc(FIREBASE_DB, 'users', userId), 'brews')
 }
 
-const getUserId = async (): Promise<string> => {
-  const user = getAuth().currentUser
-  if (user) return user.uid
+export const getUserId = async (): Promise<string> => {
+  const auth = getAuth()
+  const user = auth.currentUser
+
+  if (user) {
+    return user.uid
+  }
 
   // Check if guest ID exists
-  const storedGuestId = await AsyncStorage.getItem('guestID')
+  const storedGuestId = await AsyncStorage.getItem('guestId')
   if (storedGuestId) return storedGuestId
 
   // Generate guest ID if none exists
-  const timestamp = Date.now()
-  const randomSuffix = Math.random().toString(36).substring(2, 8)
-  const newGuestId = `guest-${timestamp}-${randomSuffix}`
-
-  // Save guest ID to storage
+  const newGuestId = uuid.v4()
   await AsyncStorage.setItem('guestID', newGuestId)
   return newGuestId
 }
 
-// Retrieve all brews for current user
-export const getUserBrews = async (): Promise<BrewData[]> => {
-  try {
-    const userId = await getUserId()
-    const brewCollectionRef = collection(FIREBASE_DB, 'users', userId, 'brews')
-    const querySnapshot = await getDocs(brewCollectionRef)
+export const getUserBrews = async (userId: string) => {
+  const brewsCollectionRef = getBrewsCollectionRef(userId)
+  const brewsQuery = query(brewsCollectionRef, orderBy('createdAt', 'desc'))
 
+  try {
+    const querySnapshot = await getDocs(brewsQuery)
     return querySnapshot.docs.map((doc) => ({
       id: doc.id,
-      ...(doc.data() as BrewData),
+      ...doc.data(),
     }))
   } catch (error) {
-    console.error('Error fetching brews: ', error)
-    throw new Error('Failed to fetch user brews.')
+    console.error('Error fetching user brews: ', error)
+    throw error
   }
 }
 
-// Save new brew to current user
 export const saveBrew = async (brewData: BrewData): Promise<void> => {
   try {
     const userId = await getUserId()
-    const brewId = `brew-${Date.now()}`
-    const brewRef = doc(
-      collection(FIREBASE_DB, 'users', userId, 'brews'),
-      brewId
-    )
 
-    await setDoc(brewRef, {
+    if (!userId) {
+      throw new Error('User ID not found.')
+    }
+
+    const userBrewsRef = collection(FIREBASE_DB, 'users', userId, 'brews')
+    await addDoc(userBrewsRef, {
       ...brewData,
       createdAt: new Date().toISOString(),
     })
@@ -71,4 +68,30 @@ export const saveBrew = async (brewData: BrewData): Promise<void> => {
     console.error('Error saving brew: ', error)
     throw new Error('Failed to save brew.')
   }
+}
+
+export const brewListener = (
+  userId: string,
+  onUpdate: (brews: any[]) => void,
+  onError: (error: any) => any
+) => {
+  const brewsCollectionRef = getBrewsCollectionRef(userId)
+  const brewsQuery = query(brewsCollectionRef, orderBy('createdAt', 'desc'))
+
+  const unsubscribe = onSnapshot(
+    brewsQuery,
+    (snapshot) => {
+      const brews = snapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }))
+      onUpdate(brews)
+    },
+    (error) => {
+      console.error('Error fetching brews: ', error)
+      onError(error)
+    }
+  )
+
+  return unsubscribe
 }
