@@ -1,8 +1,9 @@
 import AsyncStorage from '@react-native-async-storage/async-storage'
-import { FIREBASE_DB } from '../../firebaseConfig'
+import { FIREBASE_AUTH, FIREBASE_DB } from '../../firebaseConfig'
 import {
   addDoc,
   collection,
+  deleteDoc,
   doc,
   getDocs,
   onSnapshot,
@@ -66,7 +67,26 @@ export const saveBrew = async (brewData: BrewData): Promise<void> => {
     })
   } catch (error) {
     console.error('Error saving brew: ', error)
-    throw new Error('Failed to save brew.')
+    throw Error('Failed to save brew.')
+  }
+}
+
+export const deleteBrew = async (
+  brewId: string,
+  userId?: string
+): Promise<void> => {
+  const currentUserId = userId || FIREBASE_AUTH.currentUser?.uid
+
+  if (!currentUserId) {
+    throw new Error('User not logged in')
+  }
+
+  try {
+    const brewRef = doc(FIREBASE_DB, `users/${currentUserId}/brews`, brewId)
+    await deleteDoc(brewRef)
+  } catch (error) {
+    console.error('Error deleting brew: ', error)
+    throw error
   }
 }
 

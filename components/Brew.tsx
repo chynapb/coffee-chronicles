@@ -12,6 +12,7 @@ type BrewProps = {
   brewMethod: string
   brewTime: string
   rating: number
+  deleteBrew: (id: string) => void
 }
 
 const Brew = ({
@@ -22,6 +23,7 @@ const Brew = ({
   brewMethod,
   brewTime,
   rating,
+  deleteBrew,
 }: BrewProps) => {
   const formattedCreatedAt = moment(createdAt).format('MM.DD.YYYY')
 
@@ -39,7 +41,7 @@ const Brew = ({
         size={22}
         color='#343450'
         style={styles.delete}
-        onPress={() => console.log('Deleted')}
+        onPress={() => deleteBrew(id)}
       />
       <Text style={styles.header}>{formattedCreatedAt}</Text>
       <Text style={styles.detail}>
