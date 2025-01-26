@@ -1,4 +1,3 @@
-// app/(tabs)/layout.tsx
 import { Tabs } from 'expo-router'
 import { UserAuth } from '../../context/AuthContext'
 import AntDesign from '@expo/vector-icons/AntDesign'
@@ -25,31 +24,23 @@ const TabsLayout = () => {
       />
       <Tabs.Screen
         name='top-brews'
-        options={
-          !user
-            ? { href: null }
-            : {
-                title: 'Top Brews',
-                headerShown: false,
-                tabBarIcon: ({ color }) => (
-                  <AntDesign name='hearto' size={24} color={color} />
-                ),
-              }
-        }
+        options={{
+          title: 'Top Brews',
+          headerShown: false,
+          tabBarIcon: ({ color }) => (
+            <AntDesign name='hearto' size={24} color={color} />
+          ),
+        }}
       />
       <Tabs.Screen
         name='past-brews'
-        options={
-          !user
-            ? { href: null }
-            : {
-                title: 'Past Brews',
-                headerShown: false,
-                tabBarIcon: ({ color }) => (
-                  <AntDesign name='clockcircleo' size={24} color={color} />
-                ),
-              }
-        }
+        options={{
+          title: 'Past Brews',
+          headerShown: false,
+          tabBarIcon: ({ color }) => (
+            <AntDesign name='clockcircleo' size={24} color={color} />
+          ),
+        }}
       />
     </Tabs>
   )

@@ -1,5 +1,5 @@
 import AsyncStorage from '@react-native-async-storage/async-storage'
-import { FIREBASE_AUTH, FIREBASE_DB } from '../../firebaseConfig'
+import { FIREBASE_APP, FIREBASE_AUTH, FIREBASE_DB } from '../../firebaseConfig'
 import {
   addDoc,
   collection,
@@ -18,22 +18,27 @@ const getBrewsCollectionRef = (userId: string) => {
   return collection(doc(FIREBASE_DB, 'users', userId), 'brews')
 }
 
-export const getUserId = async (): Promise<string> => {
-  const auth = getAuth()
-  const user = auth.currentUser
+export const getUserId = async (): Promise<string | null> => {
+  try {
+    const currentUser = getAuth(FIREBASE_APP).currentUser
+    if (currentUser) {
+      return currentUser.uid
+    }
 
-  if (user) {
-    return user.uid
+    // Check if guest ID exists
+    let guestId = await AsyncStorage.getItem('guestId')
+
+    if (!guestId) {
+      // Generate guest ID if none exists
+      guestId = uuid.v4()
+      await AsyncStorage.setItem('guestId', guestId)
+    }
+
+    return guestId
+  } catch (error) {
+    console.error('Error getting user ID:', error)
+    return null
   }
-
-  // Check if guest ID exists
-  const storedGuestId = await AsyncStorage.getItem('guestId')
-  if (storedGuestId) return storedGuestId
-
-  // Generate guest ID if none exists
-  const newGuestId = uuid.v4()
-  await AsyncStorage.setItem('guestID', newGuestId)
-  return newGuestId
 }
 
 export const getUserBrews = async (userId: string) => {
@@ -75,14 +80,15 @@ export const deleteBrew = async (
   brewId: string,
   userId?: string
 ): Promise<void> => {
-  const currentUserId = userId || FIREBASE_AUTH.currentUser?.uid
-
-  if (!currentUserId) {
-    throw new Error('User not logged in')
-  }
-
   try {
-    const brewRef = doc(FIREBASE_DB, `users/${currentUserId}/brews`, brewId)
+    const currentUser = userId || (await getUserId())
+
+    if (!currentUser) {
+      throw new Error('User not logged in.')
+    }
+
+    const brewRef = doc(FIREBASE_DB, `users/${currentUser}/brews`, brewId)
+
     await deleteDoc(brewRef)
   } catch (error) {
     console.error('Error deleting brew: ', error)
@@ -98,7 +104,7 @@ export const brewListener = (
   const brewsCollectionRef = getBrewsCollectionRef(userId)
   const brewsQuery = query(brewsCollectionRef, orderBy('createdAt', 'desc'))
 
-  const unsubscribe = onSnapshot(
+  return onSnapshot(
     brewsQuery,
     (snapshot) => {
       const brews = snapshot.docs.map((doc) => ({
@@ -108,10 +114,7 @@ export const brewListener = (
       onUpdate(brews)
     },
     (error) => {
-      console.error('Error fetching brews: ', error)
       onError(error)
     }
   )
-
-  return unsubscribe
 }

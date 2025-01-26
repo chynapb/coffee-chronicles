@@ -10,6 +10,7 @@ import Brew from '../../components/Brew'
 import React, { useEffect, useState } from 'react'
 import { UserAuth } from '../../context/AuthContext'
 import {
+  getUserId,
   brewListener,
   deleteBrew as deleteBrewFromFirestore,
 } from '../../services/firestore/brewsService'
@@ -20,25 +21,37 @@ const PastBrews = () => {
   const { user } = UserAuth()
 
   useEffect(() => {
-    if (!user) {
-      setIsLoading(false)
-      return
-    }
+    const fetchBrews = async () => {
+      setIsLoading(true)
 
-    const unsubscribe = brewListener(
-      user?.uid,
-      (fetchedBrews) => {
-        setBrews(fetchedBrews)
-        setIsLoading(false)
-      },
-      (error) => {
+      try {
+        const userId = await getUserId()
+        if (!userId) {
+          setIsLoading(false)
+          return
+        }
+
+        const unsubscribe = brewListener(
+          userId,
+          (fetchedBrews) => {
+            setBrews(fetchedBrews)
+            setIsLoading(false)
+          },
+          (error) => {
+            console.error('Error fetching brews: ', error)
+            setIsLoading(false)
+          }
+        )
+
+        return () => unsubscribe()
+      } catch (error) {
         console.error('Error fetching brews: ', error)
         setIsLoading(false)
       }
-    )
+    }
 
-    return () => unsubscribe()
-  }, [user])
+    fetchBrews()
+  }, [])
 
   const deleteBrew = async (id: string) => {
     try {
