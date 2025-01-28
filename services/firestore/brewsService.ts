@@ -118,3 +118,26 @@ export const brewListener = (
     }
   )
 }
+
+export const getTotalBrews = async () => {
+  try {
+    const user = FIREBASE_AUTH.currentUser
+
+    if (!user) {
+      console.log('User not logged in.')
+      return
+    }
+
+    const userBrewsCollectionRef = collection(
+      FIREBASE_DB,
+      'users',
+      user.uid,
+      'brews'
+    )
+
+    const querySnapshot = await getDocs(userBrewsCollectionRef)
+    return querySnapshot.size
+  } catch (error) {
+    console.error('Error getting brews: ', error)
+  }
+}

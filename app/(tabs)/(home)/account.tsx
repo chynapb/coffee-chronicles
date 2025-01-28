@@ -4,10 +4,13 @@ import { SafeAreaView } from 'react-native-safe-area-context'
 import Button from '../../../components/Button'
 import { UserAuth } from '../../../context/AuthContext'
 import { router } from 'expo-router'
-import React from 'react'
+import { getTotalBrews } from '../../../services/firestore/brewsService'
+import React, { useEffect, useState } from 'react'
 
 const Account = () => {
-  const { user, logout, isLoading } = UserAuth()
+  const [isLoading, setIsLoading] = useState(true)
+  const { user, logout } = UserAuth()
+  const [brewTotal, setBrewTotal] = useState<any>('')
 
   const handleSignOut = async (): Promise<void> => {
     try {
@@ -21,6 +24,23 @@ const Account = () => {
       }
     }
   }
+
+  useEffect(() => {
+    const handleTotalBrews = async () => {
+      setIsLoading(true)
+
+      try {
+        const brewTotal = await getTotalBrews()
+        setBrewTotal(brewTotal)
+        setIsLoading(false)
+      } catch (error) {
+        Alert.alert('An unknown error occurred. Please try again later.')
+        console.error(error)
+      }
+    }
+
+    handleTotalBrews()
+  }, [])
 
   return (
     <SafeAreaView style={styles.container}>
@@ -37,7 +57,7 @@ const Account = () => {
         <>
           <Text>My Account</Text>
           <Text>Signed in as {user?.email}</Text>
-          <Text>Brews logged:</Text>
+          <Text>Brews logged: {brewTotal}</Text>
           <Button
             title='Sign out'
             buttonStyle={styles.button}

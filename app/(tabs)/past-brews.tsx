@@ -8,7 +8,6 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context'
 import Brew from '../../components/Brew'
 import React, { useEffect, useState } from 'react'
-import { UserAuth } from '../../context/AuthContext'
 import {
   getUserId,
   brewListener,
@@ -18,7 +17,6 @@ import {
 const PastBrews = () => {
   const [brews, setBrews] = useState<any[]>([])
   const [isLoading, setIsLoading] = useState(true)
-  const { user } = UserAuth()
 
   useEffect(() => {
     const fetchBrews = async () => {
