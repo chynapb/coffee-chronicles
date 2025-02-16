@@ -29,6 +29,7 @@ const PastBrews = () => {
           return
         }
 
+        // Pass the correct arguments to brewListener
         const unsubscribe = brewListener(
           userId,
           (fetchedBrews) => {

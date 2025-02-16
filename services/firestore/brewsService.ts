@@ -6,6 +6,7 @@ import {
   deleteDoc,
   doc,
   getDocs,
+  limit,
   onSnapshot,
   orderBy,
   query,
@@ -99,10 +100,16 @@ export const deleteBrew = async (
 export const brewListener = (
   userId: string,
   onUpdate: (brews: any[]) => void,
-  onError: (error: any) => any
+  onError: (error: any) => any,
+  limitCount?: number,
+  sortBy: 'createdAt' | 'rating' = 'createdAt'
 ) => {
   const brewsCollectionRef = getBrewsCollectionRef(userId)
-  const brewsQuery = query(brewsCollectionRef, orderBy('createdAt', 'desc'))
+  let brewsQuery = query(brewsCollectionRef, orderBy(sortBy, 'desc'))
+
+  if (limitCount) {
+    brewsQuery = query(brewsQuery, limit(limitCount))
+  }
 
   return onSnapshot(
     brewsQuery,
