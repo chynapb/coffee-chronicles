@@ -1,10 +1,4 @@
-import {
-  Text,
-  StyleSheet,
-  ActivityIndicator,
-  ScrollView,
-  Alert,
-} from 'react-native'
+import { Text, StyleSheet, ActivityIndicator, ScrollView } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import Brew from '../../components/Brew'
 import React, { useEffect, useState } from 'react'

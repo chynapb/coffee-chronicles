@@ -1,13 +1,20 @@
 import { Link, router } from 'expo-router'
-import { Text, StyleSheet, ActivityIndicator, View } from 'react-native'
+import {
+  Text,
+  StyleSheet,
+  ActivityIndicator,
+  View,
+  TextInput,
+} from 'react-native'
 import MaterialIcons from '@expo/vector-icons/MaterialIcons'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { UserAuth } from '../../../context/AuthContext'
 import AddBrew from '../../../components/AddBrew'
-import React from 'react'
+import React, { useState } from 'react'
 
 const Home = () => {
   const { user, isLoading } = UserAuth()
+  const [query, setQuery] = useState<string>('')
 
   return (
     <SafeAreaView style={styles.container}>
@@ -15,6 +22,12 @@ const Home = () => {
         <ActivityIndicator size='large' color='#FF4500' />
       ) : (
         <>
+          <TextInput
+            style={styles.input}
+            value={query}
+            onChangeText={setQuery}
+            placeholder='Search your brews...'
+          />
           <AddBrew />
           {user ? (
             <MaterialIcons
@@ -48,6 +61,20 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: 65,
     left: 20,
+  },
+  input: {
+    position: 'absolute',
+    top: 125,
+    width: 275,
+    height: 40,
+    marginTop: 5,
+    marginBottom: 15,
+    borderWidth: 1,
+    borderRadius: 50,
+    borderColor: '#979a9a',
+    backgroundColor: '#ffffff',
+    padding: 10,
+    paddingRight: 40,
   },
   linkContainer: {
     textAlign: 'center',
