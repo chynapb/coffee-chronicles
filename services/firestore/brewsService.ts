@@ -14,6 +14,7 @@ import {
 import { getAuth } from '@firebase/auth'
 import uuid from 'react-native-uuid'
 import { BrewData } from '../../types/BrewData'
+import { Alert } from 'react-native'
 
 const getBrewsCollectionRef = (userId: string) => {
   return collection(doc(FIREBASE_DB, 'users', userId), 'brews')
@@ -90,7 +91,16 @@ export const deleteBrew = async (
 
     const brewRef = doc(FIREBASE_DB, `users/${currentUser}/brews`, brewId)
 
-    await deleteDoc(brewRef)
+    Alert.alert('Delete Brew', 'Are you sure you want to delete this brew?', [
+      { text: 'Cancel', style: 'cancel' },
+      {
+        text: 'Delete',
+        style: 'destructive',
+        onPress: async () => {
+          await deleteDoc(brewRef)
+        },
+      },
+    ])
   } catch (error) {
     console.error('Error deleting brew: ', error)
     throw error

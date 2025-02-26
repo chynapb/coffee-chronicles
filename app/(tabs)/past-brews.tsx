@@ -11,7 +11,7 @@ import React, { useEffect, useState } from 'react'
 import {
   getUserId,
   brewListener,
-  deleteBrew as deleteBrewFromFirestore,
+  deleteBrew,
 } from '../../services/firestore/brewsService'
 
 const PastBrews = () => {
@@ -51,25 +51,6 @@ const PastBrews = () => {
 
     fetchBrews()
   }, [])
-
-  const deleteBrew = async (id: string) => {
-    try {
-      Alert.alert('Delete Brew', 'Are you sure you want to delete this brew?', [
-        { text: 'Cancel', style: 'cancel' },
-        {
-          text: 'Delete',
-          style: 'destructive',
-          onPress: async () => {
-            await deleteBrewFromFirestore(id)
-            setBrews((prevBrews) => prevBrews.filter((brew) => brew.id !== id))
-          },
-        },
-      ])
-    } catch (error) {
-      Alert.alert('Error', 'Failed to delete brew. Please try again.')
-      console.error(error)
-    }
-  }
 
   return (
     <SafeAreaView style={styles.container}>
