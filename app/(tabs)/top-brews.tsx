@@ -5,6 +5,7 @@ import {
   brewListener,
   deleteBrew,
   getUserId,
+  duplicateBrew,
 } from '../../services/firestore/brewsService'
 import Brew from '../../components/Brew'
 
@@ -55,7 +56,12 @@ const TopBrews = () => {
           <ActivityIndicator size='large' color='#FF4500' />
         ) : (
           brews.map((brew) => (
-            <Brew key={brew.id} deleteBrew={deleteBrew} {...brew} />
+            <Brew
+              key={brew.id}
+              deleteBrew={deleteBrew}
+              duplicateBrew={duplicateBrew}
+              {...brew}
+            />
           ))
         )}
       </ScrollView>

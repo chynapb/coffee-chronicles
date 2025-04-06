@@ -107,6 +107,28 @@ export const deleteBrew = async (
   }
 }
 
+export const duplicateBrew = async (
+  brewData: BrewData,
+  userId?: string
+): Promise<void> => {
+  try {
+    const currentUser = userId || (await getUserId())
+
+    if (!currentUser) {
+      throw new Error('User not logged in.')
+    }
+
+    const userBrewsRef = collection(FIREBASE_DB, 'users', currentUser, 'brews')
+    await addDoc(userBrewsRef, {
+      ...brewData,
+      createdAt: new Date().toISOString(),
+    })
+  } catch (error) {
+    console.error('Error duplicating brew: ', error)
+    throw error
+  }
+}
+
 export const brewListener = (
   userId: string,
   onUpdate: (brews: any[]) => void,

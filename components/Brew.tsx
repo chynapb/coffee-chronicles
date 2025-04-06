@@ -1,6 +1,5 @@
 import React, { useState } from 'react'
 import { View, Text, StyleSheet, TouchableOpacity, Modal } from 'react-native'
-import AntDesign from '@expo/vector-icons/AntDesign'
 import { MaterialCommunityIcons, FontAwesome } from '@expo/vector-icons'
 import moment from 'moment'
 
@@ -13,6 +12,9 @@ type BrewProps = {
   brewTime: string
   rating: number
   deleteBrew: (id: string) => void
+  duplicateBrew: (
+    brewData: Omit<BrewProps, 'id' | 'deleteBrew' | 'duplicateBrew'>
+  ) => void
 }
 
 const Brew = ({
@@ -24,6 +26,7 @@ const Brew = ({
   brewTime,
   rating,
   deleteBrew,
+  duplicateBrew,
 }: BrewProps) => {
   const formattedCreatedAt = moment(createdAt).format('MM.DD.YYYY')
   const [modalVisible, setModalVisible] = useState(false)
@@ -53,14 +56,27 @@ const Brew = ({
             <TouchableOpacity style={styles.menuItem}>
               <Text style={styles.menuText}>Edit</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.menuItem}>
+            <TouchableOpacity
+              style={styles.menuItem}
+              onPress={() => {
+                duplicateBrew({
+                  createdAt,
+                  bean,
+                  grinderSetting,
+                  brewMethod,
+                  brewTime,
+                  rating,
+                })
+                setModalVisible(false)
+              }}
+            >
               <Text style={styles.menuText}>Duplicate</Text>
             </TouchableOpacity>
             <TouchableOpacity
               style={styles.menuItem}
               onPress={() => {
                 deleteBrew(id)
-                setModalVisible(false) // Close menu after action
+                setModalVisible(false)
               }}
             >
               <Text style={[styles.menuText, styles.deleteText]}>Delete</Text>
