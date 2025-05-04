@@ -1,10 +1,7 @@
 import { Tabs } from 'expo-router'
-import { UserAuth } from '../../context/AuthContext'
 import AntDesign from '@expo/vector-icons/AntDesign'
 
 const TabsLayout = () => {
-  const { user } = UserAuth()
-
   return (
     <Tabs
       screenOptions={{

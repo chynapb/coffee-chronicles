@@ -180,3 +180,42 @@ export const getTotalBrews = async () => {
     console.error('Error getting brews: ', error)
   }
 }
+
+export const searchUserBrews = async (
+  userId: string,
+  searchTerm: string
+): Promise<BrewData[]> => {
+  const brewsCollectionRef = getBrewsCollectionRef(userId)
+
+  try {
+    const brewsQuery = query(brewsCollectionRef, orderBy('createdAt', 'desc'))
+    const snapshot = await getDocs(brewsQuery)
+
+    const lowerTerm = searchTerm.toLowerCase()
+
+    const filteredBrews: BrewData[] = snapshot.docs
+      .map(
+        (doc) =>
+          ({
+            id: doc.id,
+            ...doc.data(),
+          } as BrewData)
+      )
+      .filter((brew) => {
+        const bean = (brew.bean || '').toLowerCase()
+        const roaster = (brew.roaster || '').toLowerCase()
+        const rating = brew.rating.toString().toLowerCase()
+
+        return (
+          bean?.includes(lowerTerm) ||
+          roaster?.includes(lowerTerm) ||
+          rating?.includes(lowerTerm)
+        )
+      })
+
+    return filteredBrews
+  } catch (error) {
+    console.error('Error searching user brews: ', error)
+    throw error
+  }
+}

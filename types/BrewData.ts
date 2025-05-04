@@ -1,4 +1,5 @@
 export type BrewData = {
+  id: string
   bean: string
   roaster: string
   grinder: string

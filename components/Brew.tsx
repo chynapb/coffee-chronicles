@@ -3,9 +3,9 @@ import { View, Text, StyleSheet, TouchableOpacity, Modal } from 'react-native'
 import { MaterialCommunityIcons, FontAwesome } from '@expo/vector-icons'
 import moment from 'moment'
 
-type BrewProps = {
+export type BrewProps = {
   id: string
-  createdAt: string
+  createdAt?: string
   bean: string
   grinderSetting: string
   brewMethod: string

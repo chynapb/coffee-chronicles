@@ -1,4 +1,4 @@
-import { Link, router } from 'expo-router'
+import { Link, useRouter } from 'expo-router'
 import {
   Text,
   StyleSheet,
@@ -16,6 +16,7 @@ import React, { useState } from 'react'
 const Home = () => {
   const { user, isLoading } = UserAuth()
   const [query, setQuery] = useState<string>('')
+  const router = useRouter()
 
   return (
     <SafeAreaView style={styles.container}>
@@ -35,6 +36,11 @@ const Home = () => {
               size={24}
               color='#343450'
               style={styles.searchIcon}
+              onPress={() => {
+                if (query.trim()) {
+                  router.push(`/search?q=${query}`)
+                }
+              }}
             />
           </View>
           <AddBrew />
