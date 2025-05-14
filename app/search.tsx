@@ -8,7 +8,7 @@ import {
   ActivityIndicator,
   SafeAreaView,
 } from 'react-native'
-import { useLocalSearchParams } from 'expo-router'
+import { useLocalSearchParams, useNavigation } from 'expo-router'
 import { BrewData } from '../types/BrewData'
 import { BrewProps } from '../components/Brew'
 import {
@@ -20,6 +20,7 @@ import {
 import Brew from '../components/Brew'
 
 const SearchPage = () => {
+  const navigation = useNavigation()
   const { q } = useLocalSearchParams()
   const [searchTerm, setSearchTerm] = useState<string>('')
   const [allBrews, setAllBrews] = useState<BrewData[]>([])
@@ -32,6 +33,12 @@ const SearchPage = () => {
     } else if (Array.isArray(q)) {
       setSearchTerm(q.join(' '))
     }
+  }, [q])
+
+  useEffect(() => {
+    navigation.setOptions({
+      title: q ? `Results for "${q}"` : 'Search',
+    })
   }, [q])
 
   useEffect(() => {
@@ -96,14 +103,14 @@ const SearchPage = () => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <Text style={styles.header}>Search Brews</Text>
-      <TextInput
-        style={styles.input}
-        placeholder='Search by any field...'
-        value={searchTerm}
-        onChangeText={setSearchTerm}
-      />
-
+      <View style={styles.searchContainer}>
+        <TextInput
+          style={styles.input}
+          placeholder='Search by any field...'
+          value={searchTerm}
+          onChangeText={setSearchTerm}
+        />
+      </View>
       <ScrollView showsVerticalScrollIndicator={false}>
         {isLoading ? (
           <ActivityIndicator size='large' color='#FF4500' />
@@ -136,12 +143,17 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     marginBottom: 12,
   },
+  searchContainer: {
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
   input: {
     borderWidth: 1,
     borderColor: '#ccc',
-    borderRadius: 8,
     padding: 10,
     marginBottom: 16,
+    borderRadius: 50,
+    width: 350,
   },
   noResultsText: {
     textAlign: 'center',
