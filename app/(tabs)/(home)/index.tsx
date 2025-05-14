@@ -39,6 +39,7 @@ const Home = () => {
               onPress={() => {
                 if (query.trim()) {
                   router.push(`/search?q=${query}`)
+                  setQuery('')
                 }
               }}
             />
