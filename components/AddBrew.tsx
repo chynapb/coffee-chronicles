@@ -28,6 +28,7 @@ const placeholders: Record<string, string> = {
 const AddBrew = () => {
   const [modalVisible, setModalVisible] = useState(false)
   const [brewData, setBrewData] = useState<BrewData>({
+    id: '',
     bean: '',
     roaster: '',
     grinder: '',
@@ -92,6 +93,7 @@ const AddBrew = () => {
 
       Alert.alert('Success', 'Brew saved!')
       setBrewData({
+        id: '',
         bean: '',
         roaster: '',
         grinder: '',

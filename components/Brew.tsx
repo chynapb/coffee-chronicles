@@ -2,15 +2,22 @@ import React, { useState } from 'react'
 import { View, Text, StyleSheet, TouchableOpacity, Modal } from 'react-native'
 import { MaterialCommunityIcons, FontAwesome } from '@expo/vector-icons'
 import moment from 'moment'
+import { router } from 'expo-router'
 
 export type BrewProps = {
   id: string
   createdAt?: string
   bean: string
+  roaster?: string
+  grinder?: string
   grinderSetting: string
   brewMethod: string
+  waterRatio?: string
+  waterTemp?: number
+  recipe?: string
   brewTime: string
   rating: number
+  notes?: string
   deleteBrew: (id: string) => void
   duplicateBrew: (
     brewData: Omit<BrewProps, 'id' | 'deleteBrew' | 'duplicateBrew'>
@@ -21,10 +28,16 @@ const Brew = ({
   id,
   createdAt,
   bean,
+  roaster,
+  grinder,
   grinderSetting,
   brewMethod,
+  waterRatio,
+  waterTemp,
+  recipe,
   brewTime,
   rating,
+  notes,
   deleteBrew,
   duplicateBrew,
 }: BrewProps) => {
@@ -53,7 +66,28 @@ const Brew = ({
           onPress={() => setModalVisible(false)}
         >
           <View style={styles.menu}>
-            <TouchableOpacity style={styles.menuItem}>
+            <TouchableOpacity
+              style={styles.menuItem}
+              onPress={() => {
+                router.push({
+                  pathname: '/add-brew',
+                  params: {
+                    id,
+                    bean,
+                    roaster,
+                    grinder,
+                    grinderSetting,
+                    brewMethod,
+                    waterRatio,
+                    waterTemp,
+                    recipe,
+                    brewTime,
+                    rating: rating.toString(),
+                    notes,
+                  },
+                })
+              }}
+            >
               <Text style={styles.menuText}>Edit</Text>
             </TouchableOpacity>
             <TouchableOpacity
