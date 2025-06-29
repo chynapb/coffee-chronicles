@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { TouchableOpacity } from 'react-native'
-import { StyleSheet, Text, TextInput, View } from 'react-native'
+import { StyleSheet, TextInput, View } from 'react-native'
 import Feather from '@expo/vector-icons/Feather'
 
 type FormProps = {

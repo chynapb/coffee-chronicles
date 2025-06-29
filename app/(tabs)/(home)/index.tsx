@@ -5,12 +5,12 @@ import {
   ActivityIndicator,
   View,
   TextInput,
+  Pressable,
 } from 'react-native'
 import MaterialIcons from '@expo/vector-icons/MaterialIcons'
 import Ionicons from '@expo/vector-icons/Ionicons'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { UserAuth } from '../../../context/AuthContext'
-import AddBrew from '../../../components/AddBrew'
 import React, { useState } from 'react'
 
 const Home = () => {
@@ -44,7 +44,10 @@ const Home = () => {
               }}
             />
           </View>
-          <AddBrew />
+          <Pressable onPress={() => router.push('/add-brew')}>
+            <Ionicons name='add-outline' size={75} color='#FF4500' />
+            <Text>New Brew</Text>
+          </Pressable>
           {user ? (
             <MaterialIcons
               style={styles.accountButton}

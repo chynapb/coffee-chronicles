@@ -6,7 +6,7 @@ export type BrewData = {
   grinderSetting: string
   brewMethod: string
   waterRatio: string
-  waterTemp: number | string
+  waterTemp: number
   recipe: string
   brewTime: string
   rating: number

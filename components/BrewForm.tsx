@@ -7,17 +7,22 @@ import {
   Text,
   StyleSheet,
   ScrollView,
+  Pressable,
 } from 'react-native'
 import { BrewData } from '../types/BrewData'
 import { FIREBASE_DB } from '../firebaseConfig'
 import { getUserId } from '../services/firestore/brewsService'
 import { collection, doc, addDoc, setDoc, getDoc } from 'firebase/firestore'
+import FontAwesome from '@expo/vector-icons/FontAwesome'
+import { useNavigation } from '@react-navigation/native'
 
 type BrewFormProps = {
   initialData?: Partial<BrewData>
 }
 
 const BrewForm: React.FC<BrewFormProps> = ({ initialData }) => {
+  const navigation = useNavigation()
+
   const [brewData, setBrewData] = useState<BrewData>({
     id: '',
     bean: '',
@@ -83,6 +88,7 @@ const BrewForm: React.FC<BrewFormProps> = ({ initialData }) => {
       }
 
       Alert.alert('Success', 'Brew saved!')
+      navigation.goBack()
     } catch (err) {
       console.error('Error saving brew:', err)
       Alert.alert('Error', 'Could not save brew.')
@@ -155,15 +161,19 @@ const BrewForm: React.FC<BrewFormProps> = ({ initialData }) => {
         onChangeText={(val) => handleChange('brewTime', val)}
         style={styles.input}
       />
-
-      <Text style={styles.label}>Rating (0–5):</Text>
-      <TextInput
-        value={brewData.rating.toString()}
-        keyboardType='numeric'
-        onChangeText={(val) => handleChange('rating', val)}
-        style={styles.input}
-      />
-
+      <Text style={styles.label}>Rating:</Text>
+      <View style={styles.ratingContainer}>
+        {[1, 2, 3, 4, 5].map((star) => (
+          <Pressable key={star} onPress={() => handleStarPress(star)}>
+            <FontAwesome
+              name={brewData.rating >= star ? 'star' : 'star-o'}
+              size={35}
+              style={styles.star}
+              color={brewData.rating >= star ? '#FFD700' : '#C0C0C0'}
+            />
+          </Pressable>
+        ))}
+      </View>
       <Text style={styles.label}>Notes:</Text>
       <TextInput
         value={brewData.notes}
@@ -188,6 +198,15 @@ const styles = StyleSheet.create({
     borderColor: '#ccc',
     marginBottom: 16,
     padding: 8,
+  },
+  ratingContainer: {
+    marginTop: 5,
+    marginBottom: 15,
+    flexDirection: 'row',
+  },
+  star: {
+    marginHorizontal: 3,
+    color: '#FFBF00',
   },
 })
 

@@ -6,18 +6,19 @@ export default function AddBrewScreen() {
   const params = useLocalSearchParams()
 
   const initialData: Partial<BrewData> = {
-    id: params.id as string,
-    bean: params.bean as string,
-    roaster: params.roaster as string,
-    grinder: params.grinder as string,
-    grinderSetting: params.grinderSetting as string,
-    brewMethod: params.brewMethod as string,
-    waterRatio: params.waterRatio as string,
+    id: typeof params.id === 'string' ? params.id : 'undefined',
+    bean: typeof params.bean === 'string' ? params.bean : '',
+    roaster: typeof params.roaster === 'string' ? params.roaster : '',
+    grinder: typeof params.grinder === 'string' ? params.grinder : '',
+    grinderSetting:
+      typeof params.grinderSetting === 'string' ? params.grinderSetting : '',
+    brewMethod: typeof params.brewMethod === 'string' ? params.brewMethod : '',
+    waterRatio: typeof params.waterRatio === 'string' ? params.waterRatio : '',
     waterTemp: parseFloat(params.waterTemp as string) || 0,
-    recipe: params.recipe as string,
-    brewTime: params.brewTime as string,
+    recipe: typeof params.recipe === 'string' ? params.recipe : '',
+    brewTime: typeof params.brewTime === 'string' ? params.brewTime : '',
     rating: parseFloat(params.rating as string) || 0,
-    notes: params.notes as string,
+    notes: typeof params.notes === 'string' ? params.notes : '',
   }
 
   return (
